@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Notices & Announcements — SmartEdu</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-container">
+      <a class="nav-brand" href="index.html"><div class="brand-icon"><i class="fas fa-graduation-cap"></i></div><span class="brand-name">SmartEdu</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+        <li><a href="chatbot.html" class="nav-link">AI Assistant</a></li>
+        <li><a href="resources.html" class="nav-link">Resources</a></li>
+        <li><a href="attendance.html" class="nav-link">Attendance</a></li>
+        <li><a href="notices.html" class="nav-link active">Notices</a></li>
+        <li><a href="faculty.html" class="nav-link">Faculty</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-ghost" id="navUserBtn" style="display:flex;align-items:center;gap:8px;"></button>
+        <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-layout">
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Navigation</div>
+        <a href="dashboard.html" class="sidebar-link"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="chatbot.html" class="sidebar-link"><i class="fas fa-robot"></i> AI Assistant</a>
+        <a href="resources.html" class="sidebar-link"><i class="fas fa-book-open"></i> Resources</a>
+        <a href="attendance.html" class="sidebar-link"><i class="fas fa-calendar-check"></i> Attendance</a>
+        <a href="notices.html" class="sidebar-link active"><i class="fas fa-bell"></i> Notices <span class="sidebar-badge">3</span></a>
+        <a href="faculty.html" class="sidebar-link"><i class="fas fa-chalkboard-teacher"></i> Faculty</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Filter by Type</div>
+        <a href="#" class="sidebar-link" onclick="filterNotices('all', this)"><i class="fas fa-list"></i> All Notices</a>
+        <a href="#" class="sidebar-link" onclick="filterNotices('urgent', this)"><i class="fas fa-exclamation-circle" style="color:var(--danger);"></i> Urgent</a>
+        <a href="#" class="sidebar-link" onclick="filterNotices('exam', this)"><i class="fas fa-edit" style="color:var(--warning);"></i> Exams</a>
+        <a href="#" class="sidebar-link" onclick="filterNotices('event', this)"><i class="fas fa-calendar-star" style="color:var(--success);"></i> Events</a>
+        <a href="#" class="sidebar-link" onclick="filterNotices('info', this)"><i class="fas fa-info-circle" style="color:var(--primary);"></i> General Info</a>
+        <a href="#" class="sidebar-link" onclick="filterNotices('finance', this)"><i class="fas fa-money-bill" style="color:var(--teal);"></i> Finance</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+        <div>
+          <h1>Notices & Announcements</h1>
+          <p>Stay updated with all institutional communications</p>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn-ghost" onclick="markAllRead()"><i class="fas fa-check-double"></i> Mark All Read</button>
+          <button class="btn-primary"><i class="fas fa-cog"></i> Preferences</button>
+        </div>
+      </div>
+
+      <div class="filter-row">
+        <div class="search-bar" style="flex:1;max-width:400px;">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search notices..." oninput="searchNotices(this.value)" />
+        </div>
+        <select class="select-filter" onchange="filterNotices(this.value, null)">
+          <option value="all">All Types</option>
+          <option value="urgent">Urgent</option>
+          <option value="exam">Exams</option>
+          <option value="event">Events</option>
+          <option value="info">General</option>
+          <option value="finance">Finance</option>
+        </select>
+        <select class="select-filter">
+          <option>All Departments</option>
+          <option>CSE</option>
+          <option>Administration</option>
+          <option>Finance</option>
+          <option>Library</option>
+        </select>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;" id="noticeList">
+
+        <div class="notice-card" data-type="urgent">
+          <div class="notice-icon ni-danger"><i class="fas fa-exclamation-circle"></i></div>
+          <div class="notice-content">
+            <div class="notice-title">Mid-Semester Examination Schedule Released</div>
+            <div class="notice-desc">Mid-sem examinations for all Semester 5 courses are scheduled from Oct 20–28, 2026. Hall tickets must be collected from the examination cell by Oct 18. Students with pending dues will not receive hall tickets.</div>
+            <div class="notice-meta">
+              <span><i class="fas fa-user"></i> Examination Cell</span>
+              <span><i class="fas fa-clock"></i> 2 hours ago</span>
+              <span><i class="fas fa-eye"></i> 1,240 views</span>
+              <span><i class="fas fa-building"></i> All Departments</span>
+            </div>
+          </div>
+          <span class="notice-badge nb-urgent">Urgent</span>
+        </div>
+
+        <div class="notice-card" data-type="urgent">
+          <div class="notice-icon ni-danger"><i class="fas fa-book"></i></div>
+          <div class="notice-content">
+            <div class="notice-title">Library Book Return Deadline — October 12</div>
+            <div class="notice-desc">All library books must be returned by October 12, 2026. A fine of ₹5/day will be levied after the deadline. Students with pending returns will not be issued hall tickets for examinations.</div>
+            <div class="notice-meta">
+              <span><i class="fas fa-user"></i> Central Library</span>
+              <span><i class="fas fa-clock"></i> Yesterday</span>
+              <span><i class="fas fa-eye"></i> 1,800 views</span>
+            </div>
+          </div>
+          <span class="notice-badge nb-urgent">Urgent</span>
+        </div>
+
+        <div class="notice-card" data-type="exam">
+          <div class="notice-icon ni-warning"><i class="fas fa-edit"></i></div>
+          <div class="notice-content">
+            <div class="notice-title">Internal Assessment Marks Uploaded — Semester 5</div>
+            <div class="notice-desc">Internal assessment marks for Unit Test 2 have been uploaded on the student portal. Students can review their marks and submit grievances within 3 working days through the academic section.</div>
+            <div class="notice-meta">
+              <span><i class="fas fa-user"></i> Academic Section</span>
+              <span><i class="fas fa-clock"></i> 2 days ago</span>
+              <span><i class="fas fa-eye"></i> 890 views</span>
+            </div>
+          </div>
+          <span class="notice-badge nb-exam">Exam</span>
+        </div>
+
+        <div class="notice-card" data-type="event">
+          <div class="notice-icon ni-success"><i class="fas fa-trophy"></i></div>
+          <div class="notice-content">
+            <div class="notice-title">TechFest 2026 "InnovatX" — Registrations Open!</div>
+            <div class="notice-desc">Annual technical festival is open for registrations. Events include Hackathon (48-hour), Paper Presentation, Competitive Coding, Robotics Challenge, and UI/UX Design. Register before Oct 15 for early-bird discount of ₹100.</div>
+            <div class="notice-meta">
+              <span><i class="fas fa-user"></i> Student Council</span>
+              <span><i class="fas fa-clock"></i> 2 days ago</span>
+              <span><i class="fas fa-eye"></i> 2,100 views</span>
+            </div>
+          </div>
+          <span class="notice-badge nb-event">Event</span>
+        </div>
+
+        <div class="notice-card" data-type="event">
+          <div class="notice-icon ni-success"><i class="fas fa-briefcase"></i></div>
+          <div class="notice-content">
+            <div class="notice-title">Campus Placement Drive — Infosys, TCS, Wipro (Nov 1)</div>
+            <div class="notice-desc">Campus placement drive for 2026-27 batch begins November 1. Eligible criteria: CGPA ≥ 6.5, no active backlogs. Register via the placement portal by Oct 25. Pre-placement talks on Oct 28 at Seminar Hall A.</div>
+            <div class="notice-meta">
+              <span><i class="fas fa-user"></i> Placement Cell</span>
+              <span><i class="fas fa-clock"></i> 3 days ago</span>
+              <span><i class="fas fa-eye"></i> 4,500 views</span>
+            </div>
+          </div>
+          <span class="notice-badge nb-event">Placement</span>
+        </div>
+
+        <div class="notice-card" data-type="finance">
+          <div class="notice-icon ni-blue"><i class="fas fa-money-bill-wave"></i></div>
+          <div class="notice-content">
+            <div class="notice-title">Semester Fee Payment Deadline — October 20</div>
+            <div class="notice-desc">Students are reminded to complete Semester 5 fee payment before October 20, 2026. A late fee penalty of ₹500 will be applied after the deadline. Payments can be made online via the student portal or at the accounts office.</div>
+            <div class="notice-meta">
+              <span><i class="fas fa-user"></i> Accounts Office</span>
+              <span><i class="fas fa-clock"></i> 4 days ago</span>
+              <span><i class="fas fa-eye"></i> 3,200 views</span>
+            </div>
+          </div>
+          <span class="notice-badge nb-info">Finance</span>
+        </div>
+
+        <div class="notice-card" data-type="info">
+          <div class="notice-icon ni-blue"><i class="fas fa-wifi"></i></div>
+          <div class="notice-content">
+            <div class="notice-title">Campus Wi-Fi Upgrade — Scheduled Maintenance Oct 10</div>
+            <div class="notice-desc">Campus network infrastructure will undergo maintenance on October 10, 2026 from 2:00 AM – 6:00 AM. Wi-Fi services across all buildings will be temporarily unavailable. Plan your work and downloads accordingly.</div>
+            <div class="notice-meta">
+              <span><i class="fas fa-user"></i> IT Department</span>
+              <span><i class="fas fa-clock"></i> 5 days ago</span>
+              <span><i class="fas fa-eye"></i> 560 views</span>
+            </div>
+          </div>
+          <span class="notice-badge nb-info">Info</span>
+        </div>
+
+        <div class="notice-card" data-type="info">
+          <div class="notice-icon ni-success"><i class="fas fa-medkit"></i></div>
+          <div class="notice-content">
+            <div class="notice-title">Free Health Checkup Camp — October 14</div>
+            <div class="notice-desc">A free health checkup camp is being organized on October 14, 2026 at the college health centre from 10:00 AM – 4:00 PM. Services include BP check, blood sugar test, eye test, and dental checkup. No appointment required.</div>
+            <div class="notice-meta">
+              <span><i class="fas fa-user"></i> Health Centre</span>
+              <span><i class="fas fa-clock"></i> 1 week ago</span>
+              <span><i class="fas fa-eye"></i> 780 views</span>
+            </div>
+          </div>
+          <span class="notice-badge nb-event">Welfare</span>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    function filterNotices(type, el) {
+      document.querySelectorAll('.notice-card').forEach(c => {
+        c.style.display = (type === 'all' || c.dataset.type === type) ? '' : 'none';
+      });
+      if (el) {
+        document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+        el.classList.add('active');
+      }
+    }
+    function searchNotices(q) {
+      document.querySelectorAll('.notice-card').forEach(c => {
+        c.style.display = c.textContent.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
+      });
+    }
+    function markAllRead() {
+      showToast('All notices marked as read', 'success');
+      document.querySelectorAll('.sidebar-badge').forEach(b => b.remove());
+    }
+  </script>
+</body>
+</html>
+

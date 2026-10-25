@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Register — SmartEdu</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="hero-bg">
+    <div class="hero-blob blob-1"></div>
+    <div class="hero-blob blob-2"></div>
+    <div class="hero-blob blob-3"></div>
+  </div>
+
+  <div class="auth-page" style="padding: 100px 24px 40px;">
+    <div class="auth-card" style="max-width:560px;">
+      <div class="auth-logo">
+        <div style="width:56px;height:56px;background:var(--gradient);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.7rem;color:#fff;margin:0 auto 12px;box-shadow:0 8px 24px rgba(99,102,241,0.4);">
+          <i class="fas fa-graduation-cap"></i>
+        </div>
+        <div style="font-size:1.5rem;font-family:'Poppins',sans-serif;font-weight:800;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;">SmartEdu</div>
+      </div>
+
+      <h2 class="auth-title">Create Your Account</h2>
+      <p class="auth-sub">Join 12,500+ students already on SmartEdu</p>
+
+      <!-- PROGRESS -->
+      <div style="display:flex;gap:4px;margin-bottom:28px;" id="stepIndicator">
+        <div style="flex:1;height:4px;background:var(--gradient);border-radius:4px;" id="step1bar"></div>
+        <div style="flex:1;height:4px;background:var(--border);border-radius:4px;" id="step2bar"></div>
+        <div style="flex:1;height:4px;background:var(--border);border-radius:4px;" id="step3bar"></div>
+      </div>
+      <div style="text-align:center;font-size:0.82rem;color:var(--text-muted);margin-bottom:24px;" id="stepLabel">Step 1 of 3 — Personal Information</div>
+
+      <form onsubmit="handleRegister(event)" id="regForm" novalidate>
+        <!-- STEP 1 -->
+        <div id="step1">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">First Name *</label>
+              <div class="input-icon-wrap">
+                <i class="input-icon fas fa-user"></i>
+                <input class="form-control" id="regFirstName" type="text" placeholder="Priya" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Last Name *</label>
+              <div class="input-icon-wrap">
+                <i class="input-icon fas fa-user"></i>
+                <input class="form-control" id="regLastName" type="text" placeholder="Sharma" required />
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Institutional Email *</label>
+            <div class="input-icon-wrap">
+              <i class="input-icon fas fa-envelope"></i>
+              <input class="form-control" id="regEmail" type="email" placeholder="priya.sharma@college.edu" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone Number</label>
+            <div class="input-icon-wrap">
+              <i class="input-icon fas fa-phone"></i>
+              <input class="form-control" id="regPhone" type="tel" placeholder="+91 98765 43210" />
+            </div>
+          </div>
+          <button type="button" class="btn-primary btn-full" onclick="nextStep(2)">Continue <i class="fas fa-arrow-right"></i></button>
+        </div>
+
+        <!-- STEP 2 -->
+        <div id="step2" style="display:none;">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Roll Number *</label>
+              <div class="input-icon-wrap">
+                <i class="input-icon fas fa-id-card"></i>
+                <input class="form-control" id="regRoll" type="text" placeholder="21CS001" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Academic Year *</label>
+              <select class="form-control" id="regDepartment">
+                <option>2024-25</option><option>2025-26</option><option>2026-27</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Department *</label>
+              <select class="form-control" id="regSemester">
+                <option>Computer Science (CSE)</option>
+                <option>Electronics (ECE)</option>
+                <option>Mechanical (ME)</option>
+                <option>Civil (CE)</option>
+                <option>BCA</option>
+                <option>MCA</option>
+                <option>MBA</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Semester *</label>
+              <select class="form-control">
+                <option>1</option><option>2</option><option>3</option><option>4</option>
+                <option>5</option><option>6</option><option>7</option><option>8</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Section</label>
+            <select class="form-control" id="regSection">
+              <option>Section A</option><option>Section B</option><option>Section C</option>
+            </select>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <button type="button" class="btn-ghost" style="flex:1;padding:14px;border-radius:10px;" onclick="nextStep(1)"><i class="fas fa-arrow-left"></i> Back</button>
+            <button type="button" class="btn-primary" style="flex:2;padding:14px;border-radius:10px;" onclick="nextStep(3)">Continue <i class="fas fa-arrow-right"></i></button>
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div id="step3" style="display:none;">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Password *</label>
+              <div class="input-icon-wrap" style="position:relative;">
+                <i class="input-icon fas fa-lock"></i>
+                <input class="form-control" type="password" id="regPass" placeholder="Min. 8 characters" required />
+                <i class="password-toggle fas fa-eye" onclick="togglePass('regPass', this)"></i>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Confirm Password *</label>
+              <div class="input-icon-wrap">
+                <i class="input-icon fas fa-lock"></i>
+                <input class="form-control" type="password" id="regPass2" placeholder="Repeat password" required />
+              </div>
+            </div>
+          </div>
+          <!-- PASSWORD STRENGTH -->
+          <div style="margin-bottom:16px;">
+            <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:6px;">Password Strength</div>
+            <div style="height:6px;background:var(--border);border-radius:4px;overflow:hidden;">
+              <div id="strengthBar" style="height:100%;width:0%;background:var(--danger);border-radius:4px;transition:all 0.3s;"></div>
+            </div>
+            <div id="strengthLabel" style="font-size:0.75rem;color:var(--text-dim);margin-top:4px;"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">How did you hear about SmartEdu?</label>
+            <select class="form-control">
+              <option>From a classmate</option>
+              <option>Faculty recommendation</option>
+              <option>College notice board</option>
+              <option>Social media</option>
+              <option>College website</option>
+            </select>
+          </div>
+          <div class="checkbox-group" style="margin-bottom:20px;">
+            <input type="checkbox" id="terms" required />
+            <label for="terms">I agree to the <a href="#" style="color:var(--primary);">Terms of Service</a> and <a href="#" style="color:var(--primary);">Privacy Policy</a>. I consent to receiving academic notifications via email.</label>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <button type="button" class="btn-ghost" style="flex:1;padding:14px;border-radius:10px;" onclick="nextStep(2)"><i class="fas fa-arrow-left"></i> Back</button>
+            <button type="submit" class="btn-primary" style="flex:2;padding:14px;border-radius:10px;"><i class="fas fa-user-plus"></i> Create Account</button>
+          </div>
+        </div>
+      </form>
+
+      <div class="auth-footer">Already have an account? <a href="login.html">Sign in →</a></div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    let currentStep = 1;
+    const bars = { 1: 'step1bar', 2: 'step2bar', 3: 'step3bar' };
+    const labels = { 1: 'Step 1 of 3 — Personal Information', 2: 'Step 2 of 3 — Academic Details', 3: 'Step 3 of 3 — Security & Terms' };
+
+    function nextStep(step) {
+      if (step > currentStep) {
+        const fields = [...document.querySelectorAll(`#step${currentStep} input, #step${currentStep} select`)].filter(field => field.required);
+        const invalid = fields.find(field => !field.checkValidity());
+        if (invalid) { invalid.reportValidity(); return; }
+      }
+      document.getElementById('step' + currentStep).style.display = 'none';
+      document.getElementById('step' + step).style.display = 'block';
+      // Update progress bars
+      for (let i = 1; i <= 3; i++) {
+        document.getElementById('step' + i + 'bar').style.background = i <= step ? 'linear-gradient(90deg,#6366f1,#8b5cf6)' : 'rgba(255,255,255,0.08)';
+      }
+      document.getElementById('stepLabel').textContent = labels[step];
+      currentStep = step;
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      const p1 = document.getElementById('regPass').value;
+      const p2 = document.getElementById('regPass2').value;
+      if (p1 !== p2) { showToast('Passwords do not match!', 'error'); return; }
+      if (!document.getElementById('terms').checked) { showToast('Please accept the terms', 'error'); return; }
+      if (p1.length < 8) { showToast('Password must be at least 8 characters.', 'error'); return; }
+      const button = e.submitter;
+      button.disabled = true;
+      const result = await Auth.register({
+        name: `${document.getElementById('regFirstName').value.trim()} ${document.getElementById('regLastName').value.trim()}`,
+        email: document.getElementById('regEmail').value.trim(),
+        phone: document.getElementById('regPhone').value.trim(),
+        roll_no: document.getElementById('regRoll').value.trim(),
+        department: document.getElementById('regDepartment').value.match(/\(([^)]+)\)/)?.[1] || document.getElementById('regDepartment').value,
+        semester: Number(document.getElementById('regSemester').value),
+        section: document.getElementById('regSection').value.replace('Section ', ''),
+        password: p1,
+        role: 'student'
+      });
+      button.disabled = false;
+      if (!result.ok) { showToast(result.error || 'Could not create account.', 'error'); return; }
+      showToast('Account created. Please sign in.', 'success');
+      setTimeout(() => window.location.href = 'login.html', 900);
+    }
+
+    function togglePass(id, el) {
+      const inp = document.getElementById(id);
+      if (inp.type === 'password') { inp.type = 'text'; el.classList.replace('fa-eye', 'fa-eye-slash'); }
+      else { inp.type = 'password'; el.classList.replace('fa-eye-slash', 'fa-eye'); }
+    }
+
+    document.getElementById('regPass')?.addEventListener('input', function() {
+      const len = this.value.length;
+      const bar = document.getElementById('strengthBar');
+      const lbl = document.getElementById('strengthLabel');
+      if (len === 0) { bar.style.width = '0%'; lbl.textContent = ''; }
+      else if (len < 6) { bar.style.width = '30%'; bar.style.background = '#ef4444'; lbl.textContent = 'Weak'; lbl.style.color = '#ef4444'; }
+      else if (len < 10) { bar.style.width = '60%'; bar.style.background = '#f59e0b'; lbl.textContent = 'Moderate'; lbl.style.color = '#f59e0b'; }
+      else { bar.style.width = '100%'; bar.style.background = '#10b981'; lbl.textContent = 'Strong ✓'; lbl.style.color = '#10b981'; }
+    });
+  </script>
+</body>
+</html>
+

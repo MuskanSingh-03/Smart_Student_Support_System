@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Library — SmartEdu</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Library Specific Styles ── */
+    .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+    .book-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: var(--transition);
+      cursor: pointer;
+      position: relative;
+    }
+    .book-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(0,0,0,0.5); }
+    .book-cover {
+      height: 180px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .book-cover::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 16px;
+      background: rgba(0,0,0,0.25);
+      z-index: 1;
+    }
+    .book-cover::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.4));
+    }
+    .book-cover-icon { font-size: 3rem; color: rgba(255,255,255,0.9); z-index: 2; text-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+    .book-cover-pages {
+      position: absolute;
+      right: 0; top: 0; bottom: 0;
+      width: 10px;
+      background: repeating-linear-gradient(to bottom, rgba(255,255,255,0.15) 0px, rgba(255,255,255,0.15) 2px, transparent 2px, transparent 6px);
+      z-index: 2;
+    }
+    .book-badge {
+      position: absolute;
+      top: 10px; right: 16px;
+      padding: 3px 10px;
+      border-radius: 50px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      z-index: 3;
+    }
+    .book-info { padding: 14px; }
+    .book-title { font-weight: 700; font-size: 0.88rem; margin-bottom: 4px; line-height: 1.3; }
+    .book-author { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 8px; }
+    .book-meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; }
+    .book-cat { font-size: 0.7rem; font-weight: 600; padding: 2px 8px; border-radius: 50px; background: rgba(99,102,241,0.15); color: var(--primary-light); }
+    .book-rating { font-size: 0.75rem; color: #f59e0b; margin-left: auto; }
+    .book-avail { font-size: 0.75rem; font-weight: 600; }
+    .avail-yes { color: var(--success); }
+    .avail-no  { color: var(--danger); }
+    .borrow-btn {
+      width: 100%;
+      padding: 8px;
+      border-radius: 8px;
+      border: none;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: var(--transition);
+    }
+    .borrow-btn.can { background: var(--gradient); color: #fff; }
+    .borrow-btn.can:hover { opacity: 0.9; transform: scale(1.02); }
+    .borrow-btn.no  { background: rgba(255,255,255,0.06); color: var(--text-dim); cursor: not-allowed; }
+
+    /* Borrowed Books Row */
+    .borrowed-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      transition: var(--transition);
+    }
+    .borrowed-card:hover { border-color: var(--primary); }
+    .borrowed-spine {
+      width: 44px;
+      height: 60px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    /* Book Detail Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 500;
+      backdrop-filter: blur(4px);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: fadeIn 0.25s ease;
+    }
+    .modal-header {
+      padding: 24px 24px 0;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .modal-cover {
+      width: 90px;
+      height: 120px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      color: #fff;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .modal-cover::before { content:''; position:absolute; left:0;top:0;bottom:0;width:10px;background:rgba(0,0,0,0.25);border-radius:10px 0 0 10px; }
+    .modal-body { padding: 20px 24px 24px; }
+    .modal-close {
+      position: absolute;
+      top: 16px; right: 16px;
+      width: 32px; height: 32px;
+      background: rgba(255,255,255,0.08);
+      border: none;
+      border-radius: 50%;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Events */
+    .event-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      gap: 16px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .event-card:hover { transform: translateX(4px); border-color: var(--primary); }
+    .event-card::before { content:''; position:absolute; left:0;top:0;bottom:0;width:4px; }
+    .ev-technical::before { background:var(--primary); }
+    .ev-placement::before { background:var(--success); }
+    .ev-academic::before  { background:var(--accent); }
+    .ev-career::before    { background:var(--warning); }
+    .ev-cultural::before  { background:var(--pink); }
+    .ev-wellness::before  { background:var(--teal); }
+    .event-date-box {
+      min-width: 54px;
+      text-align: center;
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.2);
+      border-radius: 10px;
+      padding: 8px 4px;
+      flex-shrink: 0;
+    }
+    .ev-day  { font-size: 1.5rem; font-weight: 800; font-family:'Poppins',sans-serif; color: var(--primary); line-height:1; }
+    .ev-mon  { font-size: 0.7rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
+    .event-title { font-weight: 700; font-size: 0.92rem; margin-bottom: 4px; }
+    .event-desc  { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 8px; line-height: 1.5; }
+    .event-meta  { display: flex; gap: 12px; flex-wrap: wrap; font-size: 0.78rem; color: var(--text-dim); }
+    .ev-seats-bar { height: 4px; background: var(--border); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+    .ev-seats-fill { height: 100%; border-radius: 2px; background: var(--gradient); }
+
+    /* Study Groups */
+    .group-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      transition: var(--transition);
+    }
+    .group-card:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: var(--shadow); }
+    .group-tag { display: inline-block; font-size: 0.72rem; font-weight: 600; padding: 3px 10px; border-radius: 50px; margin-bottom: 10px; }
+    .members-row { display: flex; gap: -6px; margin: 8px 0; }
+    .member-dot { width: 28px; height: 28px; border-radius: 50%; background: var(--gradient); border: 2px solid var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 700; color: #fff; margin-left: -8px; }
+    .member-dot:first-child { margin-left: 0; }
+    .join-btn { padding: 7px 16px; border-radius: 8px; border: 1px solid var(--primary); background: transparent; color: var(--primary); font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: var(--transition); font-family: 'Inter',sans-serif; }
+    .join-btn:hover, .join-btn.joined { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    @media (max-width: 768px) {
+      .book-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .book-cover { height: 140px; }
+      .event-card { flex-direction: column; gap: 10px; }
+    }
+    @media (max-width: 420px) {
+      .book-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-container">
+      <a class="nav-brand" href="index.html">
+        <div class="brand-icon"><i class="fas fa-graduation-cap"></i></div>
+        <span class="brand-name">SmartEdu</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+        <li><a href="chatbot.html" class="nav-link">AI Assistant</a></li>
+        <li><a href="library.html" class="nav-link active">Library</a></li>
+        <li><a href="attendance.html" class="nav-link">Attendance</a></li>
+        <li><a href="notices.html" class="nav-link">Notices</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-ghost" id="navUserBtn" style="display:flex;align-items:center;gap:8px;"></button>
+        <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-layout">
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Navigation</div>
+        <a href="dashboard.html" class="sidebar-link"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="library.html" class="sidebar-link active"><i class="fas fa-book"></i> Library</a>
+        <a href="chatbot.html" class="sidebar-link"><i class="fas fa-robot"></i> AI Assistant</a>
+        <a href="resources.html" class="sidebar-link"><i class="fas fa-folder-open"></i> Resources</a>
+        <a href="attendance.html" class="sidebar-link"><i class="fas fa-calendar-check"></i> Attendance</a>
+        <a href="notices.html" class="sidebar-link"><i class="fas fa-bell"></i> Notices</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Library Quick</div>
+        <a href="#books" class="sidebar-link"><i class="fas fa-book-open"></i> Browse Books</a>
+        <a href="#borrowed" class="sidebar-link"><i class="fas fa-bookmark"></i> My Borrowed</a>
+        <a href="#events" class="sidebar-link"><i class="fas fa-calendar-star"></i> Events</a>
+        <a href="#groups" class="sidebar-link"><i class="fas fa-users"></i> Study Groups</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Categories</div>
+        <a href="#" class="sidebar-link" onclick="filterBooks('DSA')"><i class="fas fa-code"></i> DSA</a>
+        <a href="#" class="sidebar-link" onclick="filterBooks('DBMS')"><i class="fas fa-database"></i> DBMS</a>
+        <a href="#" class="sidebar-link" onclick="filterBooks('Networks')"><i class="fas fa-network-wired"></i> Networks</a>
+        <a href="#" class="sidebar-link" onclick="filterBooks('Programming')"><i class="fas fa-laptop-code"></i> Programming</a>
+        <a href="#" class="sidebar-link" onclick="filterBooks('Placement')"><i class="fas fa-briefcase"></i> Placement</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <!-- HEADER -->
+      <div class="page-header">
+        <div>
+          <h1><i class="fas fa-book" style="color:var(--primary);margin-right:10px;"></i>Digital Library</h1>
+          <p>Browse books, join study groups, register for events</p>
+        </div>
+      </div>
+
+      <!-- LIBRARY STATS -->
+      <div class="stats-row mb-6" id="libStats">
+        <div class="stat-card sc-blue"><div class="stat-card-icon"><i class="fas fa-books"></i></div><div class="stat-card-val" id="totalBooks">15</div><div class="stat-card-label">Total Books</div></div>
+        <div class="stat-card sc-green"><div class="stat-card-icon"><i class="fas fa-check-circle"></i></div><div class="stat-card-val" id="availBooks">—</div><div class="stat-card-label">Available Now</div></div>
+        <div class="stat-card sc-orange"><div class="stat-card-icon"><i class="fas fa-hand-holding-heart"></i></div><div class="stat-card-val" id="borrowedBooks">—</div><div class="stat-card-label">Currently Borrowed</div></div>
+        <div class="stat-card sc-pink"><div class="stat-card-icon"><i class="fas fa-bookmark"></i></div><div class="stat-card-val" id="myBorrowedCount">—</div><div class="stat-card-label">My Borrowed</div></div>
+      </div>
+
+      <!-- MY BORROWED BOOKS -->
+      <div id="borrowed" class="mb-6">
+        <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;">
+          <i class="fas fa-bookmark" style="color:var(--warning);"></i> My Borrowed Books
+        </h3>
+        <div id="borrowedList" style="display:flex;flex-direction:column;gap:10px;">
+          <div style="color:var(--text-muted);font-size:0.88rem;padding:20px;text-align:center;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);">
+            <i class="fas fa-spinner fa-spin"></i> Loading...
+          </div>
+        </div>
+      </div>
+
+      <!-- BOOK SEARCH + FILTER -->
+      <div id="books" class="mb-6">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
+          <h3 style="font-size:1.1rem;font-weight:700;display:flex;align-items:center;gap:8px;">
+            <i class="fas fa-book-open" style="color:var(--primary);"></i> Book Catalog
+          </h3>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+            <div class="search-bar" style="max-width:220px;">
+              <i class="fas fa-search"></i>
+              <input type="text" id="bookSearch" placeholder="Search books..." oninput="searchBooks(this.value)" />
+            </div>
+            <select class="select-filter" id="catFilter" onchange="filterBooks(this.value)">
+              <option value="all">All Categories</option>
+              <option value="DSA">DSA</option>
+              <option value="DBMS">DBMS</option>
+              <option value="Networks">Networks</option>
+              <option value="OS">Operating Systems</option>
+              <option value="SE">Software Engineering</option>
+              <option value="Programming">Programming</option>
+              <option value="Placement">Placement</option>
+            </select>
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;cursor:pointer;">
+              <input type="checkbox" id="availOnly" onchange="toggleAvailOnly(this.checked)" style="accent-color:var(--primary);" />
+              Available only
+            </label>
+          </div>
+        </div>
+        <div class="book-grid" id="bookGrid">
+          <!-- loaded by JS -->
+        </div>
+      </div>
+
+      <!-- EVENTS -->
+      <div id="events" class="mb-6">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+          <h3 style="font-size:1.1rem;font-weight:700;display:flex;align-items:center;gap:8px;">
+            <i class="fas fa-calendar-star" style="color:var(--pink);"></i> Upcoming Events
+          </h3>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button onclick="loadEvents('all')" class="chip active-chip" id="ev-all">All</button>
+            <button onclick="loadEvents('technical')" class="chip" id="ev-technical">Technical</button>
+            <button onclick="loadEvents('placement')" class="chip" id="ev-placement">Placement</button>
+            <button onclick="loadEvents('academic')" class="chip" id="ev-academic">Academic</button>
+            <button onclick="loadEvents('cultural')" class="chip" id="ev-cultural">Cultural</button>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;" id="eventList">
+          <div style="text-align:center;padding:30px;"><div class="spinner" style="margin:auto;"></div></div>
+        </div>
+      </div>
+
+      <!-- STUDY GROUPS -->
+      <div id="groups">
+        <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;">
+          <i class="fas fa-users" style="color:var(--teal);"></i> Study Groups
+        </h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;" id="groupGrid">
+          <div style="text-align:center;padding:30px;"><div class="spinner" style="margin:auto;"></div></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- BOOK DETAIL MODAL -->
+  <div class="modal-overlay" id="bookModal" onclick="closeModal(event)">
+    <div class="modal-box" style="position:relative;" id="modalBox">
+      <button class="modal-close" onclick="closeBookModal()"><i class="fas fa-times"></i></button>
+      <div class="modal-header" id="modalHeader"></div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    let allBooks = [];
+    let currentCategory = 'all';
+    let availOnly = false;
+
+    async function init() {
+      const user = getCurrentUser();
+      const userId = user ? user.id : 6;
+
+      // Library stats
+      const statsR = await apiCall('/library/stats');
+      if (statsR.ok) {
+        const s = statsR.data;
+        document.getElementById('totalBooks').textContent   = s.total_books;
+        document.getElementById('availBooks').textContent   = s.available_now;
+        document.getElementById('borrowedBooks').textContent = s.currently_borrowed;
+      }
+
+      // My borrowed books
+      const myR = await apiCall('/library/my/' + userId);
+      if (myR.ok) {
+        document.getElementById('myBorrowedCount').textContent = myR.data.length;
+        renderBorrowed(myR.data);
+      }
+
+      // Load all books
+      const booksR = await apiCall('/books');
+      if (booksR.ok) { allBooks = booksR.data; renderBooks(allBooks); }
+
+      // Load events
+      loadEvents('all');
+
+      // Load study groups
+      loadGroups(userId);
+    }
+
+    function renderBorrowed(books) {
+      const el = document.getElementById('borrowedList');
+      if (!books.length) {
+        el.innerHTML = '<div style="text-align:center;padding:20px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);color:var(--text-muted);">No books currently borrowed.</div>';
+        return;
+      }
+      const dueCls = b => {
+        const days = Math.ceil((new Date(b.due_date) - new Date()) / 86400000);
+        return days < 0 ? '#ef4444' : days <= 2 ? '#f59e0b' : '#10b981';
+      };
+      el.innerHTML = books.map(b => {
+        const days = Math.ceil((new Date(b.due_date) - new Date()) / 86400000);
+        const dueText = days < 0 ? `Overdue by ${-days} days!` : days === 0 ? 'Due today!' : `Due in ${days} days`;
+        return `
+          <div class="borrowed-card">
+            <div class="borrowed-spine" style="background:${b.cover_color};">
+              <i class="fas fa-book" style="color:#fff;"></i>
+            </div>
+            <div style="flex:1;">
+              <div style="font-weight:700;font-size:0.9rem;">${b.title}</div>
+              <div style="font-size:0.78rem;color:var(--text-muted);">by ${b.author}</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:0.78rem;font-weight:700;color:${dueCls(b)};">${dueText}</div>
+              <div style="font-size:0.72rem;color:var(--text-dim);">Due: ${b.due_date}</div>
+              <button onclick="returnBook(${b.id})" style="margin-top:6px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);color:#34d399;padding:4px 12px;border-radius:6px;cursor:pointer;font-size:0.75rem;font-family:'Inter',sans-serif;">
+                <i class="fas fa-undo"></i> Return
+              </button>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function renderBooks(books) {
+      const grid = document.getElementById('bookGrid');
+      if (!books.length) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted);">No books found.</div>';
+        return;
+      }
+      grid.innerHTML = books.map(b => {
+        const avail = b.available > 0;
+        const stars = '★'.repeat(Math.round(b.rating)) + '☆'.repeat(5 - Math.round(b.rating));
+        return `
+          <div class="book-card" onclick="openBookModal(${b.id})">
+            <div class="book-cover" style="background:linear-gradient(135deg,${b.cover_color}dd,${b.cover_color}88);">
+              <div class="book-cover-pages"></div>
+              <i class="fas fa-book book-cover-icon"></i>
+              <span class="book-badge" style="background:${avail ? 'rgba(16,185,129,0.9)' : 'rgba(239,68,68,0.9)'};color:#fff;">
+                ${avail ? b.available + ' left' : 'Unavailable'}
+              </span>
+            </div>
+            <div class="book-info">
+              <div class="book-title">${b.title}</div>
+              <div class="book-author">${b.author}</div>
+              <div class="book-meta">
+                <span class="book-cat">${b.category}</span>
+                <span class="book-rating" title="${b.rating}/5">${b.rating} ★</span>
+              </div>
+              <button class="borrow-btn ${avail ? 'can' : 'no'}" onclick="borrowBook(event,${b.id},'${b.title}')">
+                <i class="fas fa-${avail ? 'book-reader' : 'times-circle'}"></i>
+                ${avail ? 'Borrow Now' : 'Not Available'}
+              </button>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function filterBooks(cat) {
+      currentCategory = cat;
+      document.getElementById('catFilter').value = cat;
+      applyFilters();
+    }
+
+    function searchBooks(q) { applyFilters(); }
+    function toggleAvailOnly(v) { availOnly = v; applyFilters(); }
+
+    function applyFilters() {
+      const q = document.getElementById('bookSearch').value.toLowerCase();
+      let filtered = allBooks.filter(b => {
+        const match = b.title.toLowerCase().includes(q) || b.author.toLowerCase().includes(q) || b.category.toLowerCase().includes(q);
+        const catOk = currentCategory === 'all' || b.category === currentCategory;
+        const availOk = !availOnly || b.available > 0;
+        return match && catOk && availOk;
+      });
+      renderBooks(filtered);
+    }
+
+    async function borrowBook(e, bookId, title) {
+      e.stopPropagation();
+      const user = getCurrentUser();
+      const r = await apiCall('/books/borrow', { method:'POST', body: JSON.stringify({ student_id: user ? user.id : 6, book_id: bookId }) });
+      if (r.ok) {
+        showToast(`"${title}" borrowed! Due: ${r.data.due_date}`, 'success');
+        init();
+      } else {
+        showToast(r.error || 'Could not borrow book', 'error');
+      }
+    }
+
+    async function returnBook(txnId) {
+      const r = await apiCall('/books/return', { method:'POST', body: JSON.stringify({ transaction_id: txnId }) });
+      if (r.ok) { showToast('Book returned successfully!', 'success'); init(); }
+      else showToast('Could not process return', 'error');
+    }
+
+    async function openBookModal(bookId) {
+      const r = await apiCall('/books/' + bookId);
+      if (!r.ok) return;
+      const b = r.data;
+      const avail = b.available > 0;
+      document.getElementById('modalHeader').innerHTML = `
+        <div class="modal-cover" style="background:linear-gradient(135deg,${b.cover_color}cc,${b.cover_color}66);">
+          <i class="fas fa-book" style="font-size:2rem;color:#fff;z-index:1;"></i>
+        </div>
+        <div style="flex:1;">
+          <h2 style="font-size:1.15rem;font-weight:800;margin-bottom:6px;">${b.title}</h2>
+          <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:8px;">by ${b.author}</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+            <span class="book-cat">${b.category}</span>
+            <span style="font-size:0.78rem;color:#f59e0b;">${'★'.repeat(Math.round(b.rating))} ${b.rating}/5</span>
+          </div>
+          <div style="font-size:0.78rem;color:var(--text-dim);line-height:1.7;">
+            <div><b>Publisher:</b> ${b.publisher} (${b.edition} ed., ${b.year})</div>
+            <div><b>Pages:</b> ${b.pages} | <b>ISBN:</b> ${b.isbn || 'N/A'}</div>
+            <div><b>Copies:</b> ${b.total_copies} total, <span style="color:${avail ? '#10b981' : '#ef4444'}">${b.available} available</span></div>
+          </div>
+        </div>`;
+      document.getElementById('modalBody').innerHTML = `
+        <p style="color:var(--text-muted);font-size:0.9rem;line-height:1.7;margin-bottom:20px;">${b.description}</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+          <div style="background:rgba(255,255,255,0.04);border-radius:10px;padding:12px;text-align:center;">
+            <div style="font-size:1.4rem;font-weight:800;font-family:'Poppins',sans-serif;color:var(--primary);">${b.rating}</div>
+            <div style="font-size:0.72rem;color:var(--text-muted);">Student Rating</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border-radius:10px;padding:12px;text-align:center;">
+            <div style="font-size:1.4rem;font-weight:800;font-family:'Poppins',sans-serif;color:${avail ? 'var(--success)' : 'var(--danger)'};">${b.available}/${b.total_copies}</div>
+            <div style="font-size:0.72rem;color:var(--text-muted);">Copies Available</div>
+          </div>
+        </div>
+        <button class="borrow-btn ${avail ? 'can' : 'no'}" style="font-size:0.92rem;padding:12px;" onclick="borrowBook(event,${b.id},'${b.title}');closeBookModal()">
+          <i class="fas fa-book-reader"></i> ${avail ? 'Borrow This Book (14 days)' : 'Currently Unavailable'}
+        </button>`;
+      document.getElementById('bookModal').classList.add('open');
+    }
+
+    function closeBookModal() { document.getElementById('bookModal').classList.remove('open'); }
+    function closeModal(e) { if (e.target === document.getElementById('bookModal')) closeBookModal(); }
+
+    async function loadEvents(cat) {
+      document.querySelectorAll('[id^="ev-"]').forEach(b => b.classList.remove('active-chip'));
+      const btn = document.getElementById('ev-' + cat);
+      if (btn) btn.classList.add('active-chip');
+
+      const r = await apiCall('/events' + (cat !== 'all' ? '?category=' + cat : ''));
+      if (!r.ok) return;
+      const evCatColors = { technical:'var(--primary)', placement:'var(--success)', academic:'var(--accent)', career:'var(--warning)', cultural:'var(--pink)', wellness:'var(--teal)' };
+      document.getElementById('eventList').innerHTML = r.data.map(ev => {
+        const d = new Date(ev.event_date);
+        const pct = Math.round(ev.registered * 100 / ev.max_seats);
+        return `
+          <div class="event-card ev-${ev.category}">
+            <div class="event-date-box">
+              <div class="ev-day">${d.getDate()}</div>
+              <div class="ev-mon">${d.toLocaleString('en',{month:'short'})}</div>
+            </div>
+            <div style="flex:1;">
+              <div class="event-title">${ev.title}</div>
+              <div class="event-desc">${ev.description}</div>
+              <div class="event-meta">
+                <span><i class="fas fa-clock"></i> ${ev.event_time}</span>
+                <span><i class="fas fa-map-marker-alt"></i> ${ev.venue}</span>
+                <span><i class="fas fa-user"></i> ${ev.organizer}</span>
+              </div>
+              <div class="ev-seats-bar"><div class="ev-seats-fill" style="width:${pct}%;background:${evCatColors[ev.category]||'var(--primary)'};"></div></div>
+              <div style="font-size:0.72rem;color:var(--text-dim);margin-top:4px;">${ev.registered}/${ev.max_seats} registered (${pct}% full)</div>
+            </div>
+            <div style="flex-shrink:0;">
+              <button onclick="registerEvent(${ev.id},'${ev.title}')" style="background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.3);color:var(--primary-light);padding:8px 14px;border-radius:8px;cursor:pointer;font-size:0.8rem;font-weight:600;font-family:'Inter',sans-serif;white-space:nowrap;" onmouseover="this.style.background='var(--primary)';this.style.color='#fff'" onmouseout="this.style.background='rgba(99,102,241,0.12)';this.style.color='var(--primary-light)'">
+                Register <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>`;
+      }).join('') || '<div style="text-align:center;padding:30px;color:var(--text-muted);">No upcoming events in this category.</div>';
+    }
+
+    async function registerEvent(id, title) {
+      await apiCall('/events/' + id + '/register', { method: 'POST' });
+      showToast('Registered for: ' + title + ' ✓', 'success');
+      loadEvents(document.querySelector('.active-chip')?.id?.replace('ev-','') || 'all');
+    }
+
+    async function loadGroups(userId) {
+      const r = await apiCall('/groups?student_id=' + userId);
+      if (!r.ok) return;
+      const colors = ['#6366f1','#8b5cf6','#06b6d4','#10b981','#f97316','#ec4899'];
+      document.getElementById('groupGrid').innerHTML = r.data.map((g, i) => {
+        const slots = g.open_slots || 0;
+        const joined = g.is_member;
+        return `
+          <div class="group-card">
+            <span class="group-tag" style="background:${colors[i%colors.length]}22;color:${colors[i%colors.length]};">
+              ${g.subject_name || 'General'}
+            </span>
+            <div style="font-weight:700;font-size:0.95rem;margin-bottom:6px;">${g.name}</div>
+            <div style="font-size:0.82rem;color:var(--text-muted);margin-bottom:10px;line-height:1.5;">${g.description}</div>
+            <div style="font-size:0.78rem;color:var(--text-dim);margin-bottom:10px;">
+              <i class="fas fa-clock"></i> ${g.meeting_day} at ${g.meeting_time} &nbsp;|&nbsp;
+              <i class="fas fa-crown" style="color:#f59e0b;"></i> ${g.leader_name}
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div style="display:flex;align-items:center;gap:6px;">
+                <div style="display:flex;">${Array(Math.min(g.member_count,5)).fill(0).map((_,j)=>`<div class="member-dot" style="background:linear-gradient(135deg,${colors[(i+j)%colors.length]},${colors[(i+j+1)%colors.length]});">${String.fromCharCode(65+j)}</div>`).join('')}</div>
+                <span style="font-size:0.75rem;color:var(--text-muted);">${g.member_count} members • ${slots} open</span>
+              </div>
+              <button class="join-btn ${joined ? 'joined' : ''}" onclick="joinGroup(${g.id},'${g.name}',this)">
+                ${joined ? '<i class="fas fa-check"></i> Joined' : '<i class="fas fa-plus"></i> Join'}
+              </button>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    async function joinGroup(groupId, name, btn) {
+      const user = getCurrentUser();
+      const r = await apiCall('/groups/join', { method:'POST', body: JSON.stringify({ group_id: groupId, student_id: user ? user.id : 6 }) });
+      if (r.ok) {
+        btn.className = 'join-btn joined';
+        btn.innerHTML = '<i class="fas fa-check"></i> Joined';
+        showToast('Joined: ' + name + '!', 'success');
+      }
+    }
+
+    // Active chip style
+    const chipStyle = document.createElement('style');
+    chipStyle.textContent = '.active-chip { background:var(--primary) !important; color:#fff !important; border-color:var(--primary) !important; }';
+    document.head.appendChild(chipStyle);
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

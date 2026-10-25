@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Dashboard — SmartEdu</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-container">
+      <a class="nav-brand" href="index.html">
+        <div class="brand-icon"><i class="fas fa-graduation-cap"></i></div>
+        <span class="brand-name">SmartEdu</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="dashboard.html" class="nav-link active">Dashboard</a></li>
+        <li><a href="chatbot.html" class="nav-link">AI Assistant</a></li>
+        <li><a href="resources.html" class="nav-link">Resources</a></li>
+        <li><a href="attendance.html" class="nav-link">Attendance</a></li>
+        <li><a href="notices.html" class="nav-link">Notices</a></li>
+        <li><a href="faculty.html" class="nav-link">Faculty</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-ghost" id="navUserBtn" style="display:flex;align-items:center;gap:8px;"></button>
+        <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Main</div>
+        <a href="dashboard.html" class="sidebar-link active"><i class="fas fa-home"></i> Overview</a>
+        <a href="chatbot.html" class="sidebar-link"><i class="fas fa-robot"></i> AI Assistant</a>
+        <a href="resources.html" class="sidebar-link"><i class="fas fa-book-open"></i> Resources</a>
+        <a href="attendance.html" class="sidebar-link"><i class="fas fa-calendar-check"></i> Attendance</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Academic</div>
+        <a href="#" class="sidebar-link"><i class="fas fa-chart-bar"></i> Performance</a>
+        <a href="#" class="sidebar-link"><i class="fas fa-tasks"></i> Assignments</a>
+        <a href="#" class="sidebar-link"><i class="fas fa-file-alt"></i> Exam Schedule</a>
+        <a href="#" class="sidebar-link"><i class="fas fa-trophy"></i> Grades</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Communication</div>
+        <a href="notices.html" class="sidebar-link"><i class="fas fa-bell"></i> Notices <span class="sidebar-badge">3</span></a>
+        <a href="faculty.html" class="sidebar-link"><i class="fas fa-chalkboard-teacher"></i> Faculty</a>
+        <a href="#" class="sidebar-link"><i class="fas fa-comments"></i> Messages</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Account</div>
+        <a href="#" class="sidebar-link"><i class="fas fa-user"></i> My Profile</a>
+        <a href="#" class="sidebar-link"><i class="fas fa-cog"></i> Settings</a>
+        <a href="login.html" class="sidebar-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <!-- HEADER -->
+      <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+        <div>
+          <h1 id="dashGreeting">Good Evening, Student 👋</h1>
+          <p id="dashSubtitle">Here's your academic overview</p>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+          <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);color:#34d399;padding:8px 16px;border-radius:50px;font-size:0.85rem;font-weight:600;">
+            <i class="fas fa-check-circle"></i> Academic Year 2025-26
+          </div>
+          <button class="btn-primary" onclick="showToast('Report exported!','success')"><i class="fas fa-download"></i> Export Report</button>
+        </div>
+      </div>
+
+      <!-- ALERT -->
+      <div class="alert-banner alert-warning fade-in">
+        <i class="fas fa-exclamation-triangle"></i>
+        <div><strong>Attendance Alert:</strong> Your attendance in DBMS is at 74% — below the 75% threshold. You need to attend at least 2 more classes to avoid debarment.</div>
+      </div>
+
+      <!-- STATS ROW -->
+      <div class="stats-row fade-in stagger-1">
+        <div class="stat-card sc-blue">
+          <div class="stat-card-icon"><i class="fas fa-star"></i></div>
+          <div class="stat-card-val">7.9</div>
+          <div class="stat-card-label">Current CGPA</div>
+          <div class="stat-card-change change-up"><i class="fas fa-arrow-up"></i> +0.3 from last sem</div>
+        </div>
+        <div class="stat-card sc-green">
+          <div class="stat-card-icon"><i class="fas fa-calendar-check"></i></div>
+          <div class="stat-card-val">87%</div>
+          <div class="stat-card-label">Overall Attendance</div>
+          <div class="stat-card-change change-up"><i class="fas fa-arrow-up"></i> On track</div>
+        </div>
+        <div class="stat-card sc-orange">
+          <div class="stat-card-icon"><i class="fas fa-tasks"></i></div>
+          <div class="stat-card-val">3</div>
+          <div class="stat-card-label">Pending Assignments</div>
+          <div class="stat-card-change change-down"><i class="fas fa-clock"></i> Due this week</div>
+        </div>
+        <div class="stat-card sc-pink">
+          <div class="stat-card-icon"><i class="fas fa-robot"></i></div>
+          <div class="stat-card-val">24</div>
+          <div class="stat-card-label">Doubts Resolved</div>
+          <div class="stat-card-change change-up"><i class="fas fa-arrow-up"></i> This month</div>
+        </div>
+        <div class="stat-card sc-teal">
+          <div class="stat-card-icon"><i class="fas fa-book"></i></div>
+          <div class="stat-card-val">6</div>
+          <div class="stat-card-label">Subjects Enrolled</div>
+          <div class="stat-card-change" style="color:var(--text-dim);">Semester 5</div>
+        </div>
+      </div>
+
+      <!-- GRID SECTION -->
+      <div class="grid-2 mb-6">
+        <!-- PERFORMANCE CHART -->
+        <div class="card fade-in stagger-2">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+            <h3 style="font-size:1rem;font-weight:700;">Semester Performance</h3>
+            <select class="select-filter" style="padding:6px 10px;font-size:0.8rem;">
+              <option>Last 6 Semesters</option>
+              <option>Last 4 Semesters</option>
+            </select>
+          </div>
+          <div style="display:flex;align-items:flex-end;gap:12px;height:160px;padding:0 8px;">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;">
+              <div style="width:100%;background:linear-gradient(180deg,rgba(99,102,241,0.5),rgba(99,102,241,0.2));border-radius:6px 6px 0 0;height:65%;transition:height 1s;"></div>
+              <span style="font-size:0.72rem;color:var(--text-dim);">S1</span>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;">
+              <div style="width:100%;background:linear-gradient(180deg,rgba(99,102,241,0.5),rgba(99,102,241,0.2));border-radius:6px 6px 0 0;height:70%;transition:height 1s;"></div>
+              <span style="font-size:0.72rem;color:var(--text-dim);">S2</span>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;">
+              <div style="width:100%;background:linear-gradient(180deg,rgba(99,102,241,0.5),rgba(99,102,241,0.2));border-radius:6px 6px 0 0;height:68%;transition:height 1s;"></div>
+              <span style="font-size:0.72rem;color:var(--text-dim);">S3</span>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;">
+              <div style="width:100%;background:linear-gradient(180deg,rgba(99,102,241,0.5),rgba(99,102,241,0.2));border-radius:6px 6px 0 0;height:72%;transition:height 1s;"></div>
+              <span style="font-size:0.72rem;color:var(--text-dim);">S4</span>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;">
+              <div style="width:100%;background:linear-gradient(180deg,rgba(99,102,241,0.5),rgba(99,102,241,0.2));border-radius:6px 6px 0 0;height:76%;transition:height 1s;"></div>
+              <span style="font-size:0.72rem;color:var(--text-dim);">S5</span>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;">
+              <div style="width:100%;background:var(--gradient);border-radius:6px 6px 0 0;height:86%;box-shadow:0 0 16px rgba(99,102,241,0.4);transition:height 1s;"></div>
+              <span style="font-size:0.72rem;color:var(--primary);">Now</span>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-around;margin-top:16px;padding-top:16px;border-top:1px solid var(--border);">
+            <div style="text-align:center;"><div style="font-size:1.2rem;font-weight:800;color:#6366f1;">7.9</div><div style="font-size:0.75rem;color:var(--text-muted);">Current CGPA</div></div>
+            <div style="text-align:center;"><div style="font-size:1.2rem;font-weight:800;color:#10b981;">7.6</div><div style="font-size:0.75rem;color:var(--text-muted);">Best Sem</div></div>
+            <div style="text-align:center;"><div style="font-size:1.2rem;font-weight:800;color:#f59e0b;">6.8</div><div style="font-size:0.75rem;color:var(--text-muted);">Lowest Sem</div></div>
+          </div>
+        </div>
+
+        <!-- SUBJECT WISE -->
+        <div class="card fade-in stagger-2">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+            <h3 style="font-size:1rem;font-weight:700;">Subject-wise Grades</h3>
+            <span class="badge badge-primary">Sem 5</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.88rem;">
+                <span style="color:var(--text-muted);">Data Structures & Algorithms</span>
+                <span style="font-weight:700;color:#6366f1;">A (9.0)</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill pf-blue" style="width:90%"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.88rem;">
+                <span style="color:var(--text-muted);">Database Management System</span>
+                <span style="font-weight:700;color:#10b981;">B+ (8.0)</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill pf-green" style="width:80%"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.88rem;">
+                <span style="color:var(--text-muted);">Computer Networks</span>
+                <span style="font-weight:700;color:#f97316;">B (7.5)</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill pf-orange" style="width:75%"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.88rem;">
+                <span style="color:var(--text-muted);">Operating Systems</span>
+                <span style="font-weight:700;color:#8b5cf6;">A (9.5)</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill pf-blue" style="width:95%"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.88rem;">
+                <span style="color:var(--text-muted);">Software Engineering</span>
+                <span style="font-weight:700;color:#06b6d4;">B+ (8.5)</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill pf-green" style="width:85%"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2 mb-6">
+        <!-- UPCOMING -->
+        <div class="card fade-in stagger-3">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+            <h3 style="font-size:1rem;font-weight:700;">Upcoming Deadlines</h3>
+            <a href="#" style="font-size:0.82rem;color:var(--primary);">View All</a>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:10px;">
+              <div style="width:42px;height:42px;background:rgba(239,68,68,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#ef4444;font-size:0.9rem;flex-shrink:0;"><i class="fas fa-file-alt"></i></div>
+              <div style="flex:1;"><div style="font-size:0.9rem;font-weight:600;">DSA Assignment 3</div><div style="font-size:0.78rem;color:var(--text-muted);">Due: Tomorrow, 11:59 PM</div></div>
+              <span class="badge badge-danger">Urgent</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.15);border-radius:10px;">
+              <div style="width:42px;height:42px;background:rgba(245,158,11,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#f59e0b;font-size:0.9rem;flex-shrink:0;"><i class="fas fa-edit"></i></div>
+              <div style="flex:1;"><div style="font-size:0.9rem;font-weight:600;">DBMS Mid-Sem Exam</div><div style="font-size:0.78rem;color:var(--text-muted);">In 5 days · Room 201</div></div>
+              <span class="badge badge-warning">Exam</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(99,102,241,0.06);border:1px solid rgba(99,102,241,0.15);border-radius:10px;">
+              <div style="width:42px;height:42px;background:rgba(99,102,241,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#6366f1;font-size:0.9rem;flex-shrink:0;"><i class="fas fa-project-diagram"></i></div>
+              <div style="flex:1;"><div style="font-size:0.9rem;font-weight:600;">SE Project Proposal</div><div style="font-size:0.78rem;color:var(--text-muted);">In 10 days · Online</div></div>
+              <span class="badge badge-primary">Project</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:10px;">
+              <div style="width:42px;height:42px;background:rgba(16,185,129,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#10b981;font-size:0.9rem;flex-shrink:0;"><i class="fas fa-money-bill"></i></div>
+              <div style="flex:1;"><div style="font-size:0.9rem;font-weight:600;">Semester Fee Payment</div><div style="font-size:0.78rem;color:var(--text-muted);">Due in 15 days</div></div>
+              <span class="badge badge-success">Finance</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CALENDAR + QUICK ACTIONS -->
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <div id="miniCalendar" class="mini-calendar fade-in stagger-3"></div>
+          <div class="card fade-in stagger-4">
+            <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;">Quick Actions</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <a href="chatbot.html" style="display:flex;align-items:center;gap:8px;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);border-radius:10px;padding:12px;color:var(--primary-light);font-size:0.85rem;font-weight:500;transition:var(--transition);text-decoration:none;" onmouseover="this.style.background='rgba(99,102,241,0.2)'" onmouseout="this.style.background='rgba(99,102,241,0.1)'">
+                <i class="fas fa-robot"></i> Ask AI
+              </a>
+              <a href="attendance.html" style="display:flex;align-items:center;gap:8px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:12px;color:#34d399;font-size:0.85rem;font-weight:500;transition:var(--transition);text-decoration:none;" onmouseover="this.style.background='rgba(16,185,129,0.2)'" onmouseout="this.style.background='rgba(16,185,129,0.1)'">
+                <i class="fas fa-calendar"></i> Attendance
+              </a>
+              <a href="resources.html" style="display:flex;align-items:center;gap:8px;background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.2);border-radius:10px;padding:12px;color:#fb923c;font-size:0.85rem;font-weight:500;transition:var(--transition);text-decoration:none;" onmouseover="this.style.background='rgba(249,115,22,0.2)'" onmouseout="this.style.background='rgba(249,115,22,0.1)'">
+                <i class="fas fa-book"></i> Resources
+              </a>
+              <a href="notices.html" style="display:flex;align-items:center;gap:8px;background:rgba(236,72,153,0.1);border:1px solid rgba(236,72,153,0.2);border-radius:10px;padding:12px;color:#f472b6;font-size:0.85rem;font-weight:500;transition:var(--transition);text-decoration:none;" onmouseover="this.style.background='rgba(236,72,153,0.2)'" onmouseout="this.style.background='rgba(236,72,153,0.1)'">
+                <i class="fas fa-bell"></i> Notices
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RECENT ACTIVITY -->
+      <div class="card fade-in stagger-4">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+          <h3 style="font-size:1rem;font-weight:700;">Recent Activity</h3>
+          <a href="#" style="font-size:0.82rem;color:var(--primary);">Clear All</a>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0;">
+          <div style="display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--border);">
+            <div style="width:36px;height:36px;background:rgba(99,102,241,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#6366f1;flex-shrink:0;"><i class="fas fa-robot" style="font-size:0.9rem;"></i></div>
+            <div style="flex:1;"><div style="font-size:0.88rem;font-weight:500;">AI resolved your doubt on <strong>Binary Trees</strong></div><div style="font-size:0.78rem;color:var(--text-muted);">2 hours ago</div></div>
+          </div>
+          <div style="display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--border);">
+            <div style="width:36px;height:36px;background:rgba(16,185,129,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#10b981;flex-shrink:0;"><i class="fas fa-upload" style="font-size:0.9rem;"></i></div>
+            <div style="flex:1;"><div style="font-size:0.88rem;font-weight:500;">Submitted <strong>CN Lab Report</strong> successfully</div><div style="font-size:0.78rem;color:var(--text-muted);">Yesterday, 4:30 PM</div></div>
+          </div>
+          <div style="display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--border);">
+            <div style="width:36px;height:36px;background:rgba(245,158,11,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#f59e0b;flex-shrink:0;"><i class="fas fa-bell" style="font-size:0.9rem;"></i></div>
+            <div style="flex:1;"><div style="font-size:0.88rem;font-weight:500;">New notice: <strong>Exam schedule released</strong> for Sem 5</div><div style="font-size:0.78rem;color:var(--text-muted);">2 days ago</div></div>
+          </div>
+          <div style="display:flex;gap:16px;padding:14px 0;">
+            <div style="width:36px;height:36px;background:rgba(139,92,246,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#8b5cf6;flex-shrink:0;"><i class="fas fa-download" style="font-size:0.9rem;"></i></div>
+            <div style="flex:1;"><div style="font-size:0.88rem;font-weight:500;">Downloaded <strong>OS Module 3 Notes</strong></div><div style="font-size:0.78rem;color:var(--text-muted);">3 days ago</div></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const user = getCurrentUser();
+      if (!user) return;
+
+      // Dynamic greeting based on time
+      const hour = new Date().getHours();
+      const greet = hour < 12 ? 'Good Morning' : hour < 17 ? 'Good Afternoon' : 'Good Evening';
+      const firstName = user.name.split(' ')[0];
+      const el = document.getElementById('dashGreeting');
+      if (el) el.textContent = greet + ', ' + firstName + ' 👋';
+
+      // Subtitle
+      const sub = document.getElementById('dashSubtitle');
+      if (sub) {
+        sub.textContent = "Here's your academic overview" +
+          (user.department ? ' — ' + user.department : '') +
+          (user.semester ? ', Semester ' + user.semester : '') +
+          (user.roll_no ? ' · ' + user.roll_no : '');
+      }
+
+      // Logout link in sidebar
+      const logoutLink = document.getElementById('sidebarLogout');
+      if (logoutLink) logoutLink.onclick = function(e) { e.preventDefault(); doLogout(); };
+
+      // Load live dashboard data from API
+      Dashboard.get(user.id).then(r => {
+        if (!r.ok) return;
+        const d = r.data;
+        const vals = document.querySelectorAll('.stat-card-val');
+        if (d.cgpa && vals[0])        vals[0].textContent = parseFloat(d.cgpa).toFixed(1);
+        if (d.attendance && vals[1])  vals[1].textContent = (d.attendance.percentage || 0) + '%';
+        if (d.pending_assignments !== undefined && vals[2]) vals[2].textContent = d.pending_assignments;
+        if (d.at_risk_subjects && d.at_risk_subjects.length > 0) {
+          const alert = document.querySelector('.alert-banner');
+          if (alert) {
+            alert.innerHTML = '<i class="fas fa-exclamation-triangle"></i><div><strong>Attendance Alert:</strong> ' +
+              d.at_risk_subjects.map(s => s.subject_name + ' is at ' + s.pct + '%').join(', ') +
+              ' — below 75% threshold!</div>';
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+

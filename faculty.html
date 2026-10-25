@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Faculty Portal — SmartEdu</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-container">
+      <a class="nav-brand" href="index.html"><div class="brand-icon"><i class="fas fa-graduation-cap"></i></div><span class="brand-name">SmartEdu</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+        <li><a href="chatbot.html" class="nav-link">AI Assistant</a></li>
+        <li><a href="resources.html" class="nav-link">Resources</a></li>
+        <li><a href="attendance.html" class="nav-link">Attendance</a></li>
+        <li><a href="notices.html" class="nav-link">Notices</a></li>
+        <li><a href="faculty.html" class="nav-link active">Faculty</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-ghost" id="navUserBtn" style="display:flex;align-items:center;gap:8px;"></button>
+        <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-layout">
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Faculty Portal</div>
+        <a href="faculty.html" class="sidebar-link active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="#" class="sidebar-link"><i class="fas fa-users"></i> My Students</a>
+        <a href="#" class="sidebar-link" onclick="showToast('Attendance marked!','success')"><i class="fas fa-calendar-alt"></i> Mark Attendance</a>
+        <a href="#" class="sidebar-link" onclick="showToast('Upload dialog opened','info')"><i class="fas fa-upload"></i> Upload Resources</a>
+        <a href="#" class="sidebar-link"><i class="fas fa-bullhorn"></i> Post Notice</a>
+        <a href="#" class="sidebar-link"><i class="fas fa-edit"></i> Grade Assignments</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Analytics</div>
+        <a href="#" class="sidebar-link"><i class="fas fa-chart-bar"></i> Class Analytics</a>
+        <a href="#" class="sidebar-link"><i class="fas fa-exclamation-triangle" style="color:var(--danger);"></i> At-Risk Students</a>
+        <a href="#" class="sidebar-link"><i class="fas fa-file-alt"></i> Performance Report</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Switch</div>
+        <a href="dashboard.html" class="sidebar-link"><i class="fas fa-user-graduate"></i> Student View</a>
+        <a href="login.html" class="sidebar-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+        <div>
+          <h1>Faculty Dashboard</h1>
+          <p>Welcome, Prof. Anita Desai — Database Management System & Data Warehousing</p>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn-ghost" onclick="showToast('Report exported!','success')"><i class="fas fa-file-export"></i> Export Report</button>
+          <button class="btn-primary" onclick="showToast('Notice posted successfully!','success')"><i class="fas fa-bullhorn"></i> Post Notice</button>
+        </div>
+      </div>
+
+      <div class="stats-row fade-in">
+        <div class="stat-card sc-blue">
+          <div class="stat-card-icon"><i class="fas fa-users"></i></div>
+          <div class="stat-card-val">68</div>
+          <div class="stat-card-label">Total Students</div>
+          <div class="stat-card-change" style="color:var(--text-dim);">Sem 5 — DBMS Section A</div>
+        </div>
+        <div class="stat-card sc-green">
+          <div class="stat-card-icon"><i class="fas fa-star"></i></div>
+          <div class="stat-card-val">7.4</div>
+          <div class="stat-card-label">Class Avg CGPA</div>
+          <div class="stat-card-change change-up"><i class="fas fa-arrow-up"></i> +0.2 this semester</div>
+        </div>
+        <div class="stat-card sc-orange">
+          <div class="stat-card-icon"><i class="fas fa-exclamation-triangle"></i></div>
+          <div class="stat-card-val">7</div>
+          <div class="stat-card-label">At-Risk Students</div>
+          <div class="stat-card-change change-down">Below 75% attendance</div>
+        </div>
+        <div class="stat-card sc-pink">
+          <div class="stat-card-icon"><i class="fas fa-percentage"></i></div>
+          <div class="stat-card-val">82%</div>
+          <div class="stat-card-label">Class Attendance</div>
+          <div class="stat-card-change change-up"><i class="fas fa-arrow-up"></i> Above threshold</div>
+        </div>
+        <div class="stat-card sc-teal">
+          <div class="stat-card-icon"><i class="fas fa-tasks"></i></div>
+          <div class="stat-card-val">3</div>
+          <div class="stat-card-label">Pending Reviews</div>
+          <div class="stat-card-change" style="color:var(--warning);">Assignments to grade</div>
+        </div>
+      </div>
+
+      <!-- AT-RISK + PERFORMANCE -->
+      <div class="grid-2 mb-6 fade-in">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+            <h3 style="font-size:1rem;font-weight:700;"><i class="fas fa-exclamation-triangle" style="color:var(--warning);margin-right:8px;"></i>At-Risk Students</h3>
+            <button class="btn-ghost" style="padding:6px 12px;font-size:0.8rem;" onclick="showToast('Alerts sent to 7 students','warning')"><i class="fas fa-paper-plane"></i> Send All Alerts</button>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:10px;">
+              <div style="width:38px;height:38px;background:linear-gradient(135deg,#ef4444,#f97316);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0;font-size:0.9rem;">A</div>
+              <div style="flex:1;"><div style="font-size:0.9rem;font-weight:600;">Arjun Mehta</div><div style="font-size:0.78rem;color:var(--text-muted);">Attendance: 68% | CGPA: 6.2</div></div>
+              <button onclick="showToast('Alert sent to Arjun Mehta','warning')" style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#f87171;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:0.78rem;font-family:'Inter',sans-serif;"><i class="fas fa-bell"></i> Alert</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.15);border-radius:10px;">
+              <div style="width:38px;height:38px;background:linear-gradient(135deg,#f59e0b,#f97316);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0;font-size:0.9rem;">P</div>
+              <div style="flex:1;"><div style="font-size:0.9rem;font-weight:600;">Priya Sharma</div><div style="font-size:0.78rem;color:var(--text-muted);">Attendance: 74% | CGPA: 7.9</div></div>
+              <button onclick="showToast('Warning sent to Priya Sharma','warning')" style="background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);color:#fbbf24;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:0.78rem;font-family:'Inter',sans-serif;"><i class="fas fa-bell"></i> Warn</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:10px;">
+              <div style="width:38px;height:38px;background:linear-gradient(135deg,#06b6d4,#6366f1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0;font-size:0.9rem;">S</div>
+              <div style="flex:1;"><div style="font-size:0.9rem;font-weight:600;">Sneha Patil</div><div style="font-size:0.78rem;color:var(--text-muted);">Attendance: 65% | CGPA: 5.8</div></div>
+              <button onclick="showToast('Critical alert sent to Sneha Patil','error')" style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#f87171;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:0.78rem;font-family:'Inter',sans-serif;"><i class="fas fa-exclamation"></i> Critical</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.15);border-radius:10px;">
+              <div style="width:38px;height:38px;background:linear-gradient(135deg,#8b5cf6,#6366f1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0;font-size:0.9rem;">K</div>
+              <div style="flex:1;"><div style="font-size:0.9rem;font-weight:600;">Karan Nair</div><div style="font-size:0.78rem;color:var(--text-muted);">Attendance: 72% | CGPA: 7.1</div></div>
+              <button onclick="showToast('Warning sent to Karan Nair','warning')" style="background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);color:#fbbf24;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:0.78rem;font-family:'Inter',sans-serif;"><i class="fas fa-bell"></i> Warn</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size:1rem;font-weight:700;margin-bottom:20px;">Class Grade Distribution</h3>
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.85rem;"><span style="color:var(--text-muted);">Outstanding (O) — 9.0+ SGPA</span><span style="font-weight:700;color:#10b981;">12 students (18%)</span></div>
+              <div class="progress-bar"><div class="progress-fill pf-green" style="width:18%"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.85rem;"><span style="color:var(--text-muted);">Excellent (A+) — 8.5–8.9</span><span style="font-weight:700;color:#6366f1;">20 students (29%)</span></div>
+              <div class="progress-bar"><div class="progress-fill pf-blue" style="width:29%"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.85rem;"><span style="color:var(--text-muted);">Very Good (A) — 7.5–8.4</span><span style="font-weight:700;color:#8b5cf6;">22 students (32%)</span></div>
+              <div class="progress-bar"><div class="progress-fill pf-blue" style="width:32%"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.85rem;"><span style="color:var(--text-muted);">Good (B+) — 6.5–7.4</span><span style="font-weight:700;color:#f59e0b;">9 students (13%)</span></div>
+              <div class="progress-bar"><div class="progress-fill pf-orange" style="width:13%"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.85rem;"><span style="color:var(--text-muted);">Average and Below (C or less)</span><span style="font-weight:700;color:#ef4444;">5 students (7%)</span></div>
+              <div class="progress-bar"><div class="progress-fill pf-danger" style="width:7%"></div></div>
+            </div>
+          </div>
+          <div class="alert-banner alert-success" style="margin-top:20px;margin-bottom:0;">
+            <i class="fas fa-chart-line"></i>
+            <div><strong>AI Insight:</strong> Class performance improved by 0.2 CGPA points compared to last semester. Normalization topic needs revisit — 35% of students scored below 7 in that section.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STUDENT ROSTER -->
+      <div class="card mb-6 fade-in">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+          <h3 style="font-size:1rem;font-weight:700;">Student Roster</h3>
+          <div style="display:flex;gap:10px;">
+            <div class="search-bar" style="padding:8px 14px;"><i class="fas fa-search"></i><input type="text" placeholder="Search student..." style="font-size:0.85rem;" /></div>
+            <button class="btn-ghost" style="padding:8px 14px;font-size:0.82rem;" onclick="showToast('Roster exported!','success')"><i class="fas fa-download"></i> Export</button>
+          </div>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr><th>Student</th><th>Roll No.</th><th>CGPA</th><th>DBMS Attendance</th><th>Internal Marks</th><th>Status</th><th>Action</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div style="font-weight:600;font-size:0.9rem;">Ananya Roy</div></td>
+              <td style="color:var(--text-dim);">21CS023</td>
+              <td style="color:#10b981;font-weight:700;">9.1</td>
+              <td><span class="status-pill sp-present">95%</span></td>
+              <td>28/30</td>
+              <td><span class="badge badge-success">Excellent</span></td>
+              <td><button onclick="showToast('Message sent to Ananya','success')" style="background:none;border:none;color:var(--primary);cursor:pointer;font-size:0.82rem;"><i class="fas fa-paper-plane"></i></button></td>
+            </tr>
+            <tr>
+              <td><div style="font-weight:600;font-size:0.9rem;">Rahul Mehta</div></td>
+              <td style="color:var(--text-dim);">21CS012</td>
+              <td style="color:#6366f1;font-weight:700;">8.4</td>
+              <td><span class="status-pill sp-present">91%</span></td>
+              <td>25/30</td>
+              <td><span class="badge badge-primary">Good</span></td>
+              <td><button onclick="showToast('Message sent to Rahul','success')" style="background:none;border:none;color:var(--primary);cursor:pointer;font-size:0.82rem;"><i class="fas fa-paper-plane"></i></button></td>
+            </tr>
+            <tr>
+              <td><div style="font-weight:600;font-size:0.9rem;">Priya Sharma</div></td>
+              <td style="color:var(--text-dim);">21CS001</td>
+              <td style="color:#6366f1;font-weight:700;">7.9</td>
+              <td><span class="status-pill sp-late">74%</span></td>
+              <td>22/30</td>
+              <td><span class="badge badge-warning">Warning</span></td>
+              <td><button onclick="showToast('Warning sent to Priya','warning')" style="background:none;border:none;color:var(--warning);cursor:pointer;font-size:0.82rem;"><i class="fas fa-exclamation-triangle"></i></button></td>
+            </tr>
+            <tr>
+              <td><div style="font-weight:600;font-size:0.9rem;">Karan Nair</div></td>
+              <td style="color:var(--text-dim);">21CS041</td>
+              <td style="color:#f59e0b;font-weight:700;">7.1</td>
+              <td><span class="status-pill sp-late">72%</span></td>
+              <td>19/30</td>
+              <td><span class="badge badge-warning">Warning</span></td>
+              <td><button onclick="showToast('Warning sent to Karan','warning')" style="background:none;border:none;color:var(--warning);cursor:pointer;font-size:0.82rem;"><i class="fas fa-exclamation-triangle"></i></button></td>
+            </tr>
+            <tr>
+              <td><div style="font-weight:600;font-size:0.9rem;">Arjun Mehta</div></td>
+              <td style="color:var(--text-dim);">21CS007</td>
+              <td style="color:#f59e0b;font-weight:700;">6.2</td>
+              <td><span class="status-pill sp-absent">68%</span></td>
+              <td>14/30</td>
+              <td><span class="badge badge-danger">At-Risk</span></td>
+              <td><button onclick="showToast('Alert sent to Arjun!','error')" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:0.82rem;"><i class="fas fa-exclamation-circle"></i></button></td>
+            </tr>
+            <tr>
+              <td><div style="font-weight:600;font-size:0.9rem;">Sneha Patil</div></td>
+              <td style="color:var(--text-dim);">21CS019</td>
+              <td style="color:#ef4444;font-weight:700;">5.8</td>
+              <td><span class="status-pill sp-absent">65%</span></td>
+              <td>11/30</td>
+              <td><span class="badge badge-danger">Critical</span></td>
+              <td><button onclick="showToast('Critical alert sent to Sneha!','error')" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:0.82rem;"><i class="fas fa-exclamation-circle"></i></button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- POST ANNOUNCEMENT -->
+      <div class="card fade-in">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:20px;"><i class="fas fa-bullhorn" style="color:var(--primary);margin-right:8px;"></i>Post Announcement</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Notice Title</label>
+            <input class="form-control" type="text" placeholder="e.g., DBMS Mid-Sem Syllabus Update" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select class="form-control">
+              <option>General</option><option>Exam</option><option>Assignment</option><option>Urgent</option><option>Resource</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea class="form-control" rows="4" placeholder="Write your announcement here..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Target Audience</label>
+            <select class="form-control">
+              <option>All Students (Sem 5)</option><option>Section A Only</option><option>Section B Only</option><option>Specific Students</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Priority</label>
+            <select class="form-control">
+              <option>Normal</option><option>High</option><option>Urgent</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;">
+          <button class="btn-primary" onclick="showToast('Notice posted successfully!','success')"><i class="fas fa-bullhorn"></i> Post Notice</button>
+          <button class="btn-ghost" onclick="showToast('Draft saved!','info')"><i class="fas fa-save"></i> Save Draft</button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
+

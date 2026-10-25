@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>AI Assistant — SmartEdu</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-container">
+      <a class="nav-brand" href="index.html"><div class="brand-icon"><i class="fas fa-graduation-cap"></i></div><span class="brand-name">SmartEdu</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+        <li><a href="chatbot.html" class="nav-link active">AI Assistant</a></li>
+        <li><a href="resources.html" class="nav-link">Resources</a></li>
+        <li><a href="attendance.html" class="nav-link">Attendance</a></li>
+        <li><a href="notices.html" class="nav-link">Notices</a></li>
+        <li><a href="faculty.html" class="nav-link">Faculty</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-ghost" id="navUserBtn" style="display:flex;align-items:center;gap:8px;"></button>
+        <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-layout">
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Navigation</div>
+        <a href="dashboard.html" class="sidebar-link"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="chatbot.html" class="sidebar-link active"><i class="fas fa-robot"></i> AI Assistant</a>
+        <a href="resources.html" class="sidebar-link"><i class="fas fa-book-open"></i> Resources</a>
+        <a href="attendance.html" class="sidebar-link"><i class="fas fa-calendar-check"></i> Attendance</a>
+        <a href="notices.html" class="sidebar-link"><i class="fas fa-bell"></i> Notices</a>
+        <a href="faculty.html" class="sidebar-link"><i class="fas fa-chalkboard-teacher"></i> Faculty</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Quick Topics</div>
+        <a href="#" class="sidebar-link" onclick="setTopic('Mathematics')"><i class="fas fa-calculator"></i> Mathematics</a>
+        <a href="#" class="sidebar-link" onclick="setTopic('Data Structures')"><i class="fas fa-laptop-code"></i> Data Structures</a>
+        <a href="#" class="sidebar-link" onclick="setTopic('Database Management')"><i class="fas fa-database"></i> DBMS</a>
+        <a href="#" class="sidebar-link" onclick="setTopic('Computer Networks')"><i class="fas fa-network-wired"></i> Networks</a>
+        <a href="#" class="sidebar-link" onclick="setTopic('Operating Systems')"><i class="fas fa-microchip"></i> OS</a>
+        <a href="#" class="sidebar-link" onclick="setTopic('Exam tips')"><i class="fas fa-lightbulb"></i> Exam Tips</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Chat History</div>
+        <a href="#" class="sidebar-link" style="font-size:0.82rem;"><i class="fas fa-comment"></i> Binary Trees</a>
+        <a href="#" class="sidebar-link" style="font-size:0.82rem;"><i class="fas fa-comment"></i> SQL Joins</a>
+        <a href="#" class="sidebar-link" style="font-size:0.82rem;"><i class="fas fa-comment"></i> OSI Model</a>
+        <button onclick="clearChat()" style="width:100%;margin-top:8px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#f87171;padding:10px;border-radius:10px;cursor:pointer;font-size:0.85rem;font-family:'Inter',sans-serif;"><i class="fas fa-trash"></i> Clear History</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="page-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div>
+          <h1>AI Doubt Assistant</h1>
+          <p>Ask anything about your subjects — available 24×7, always ready</p>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn-ghost" onclick="saveChat()"><i class="fas fa-save"></i> Save Chat</button>
+          <button class="btn-primary" onclick="window.location.href='resources.html'"><i class="fas fa-book"></i> Browse Resources</button>
+        </div>
+      </div>
+
+      <div class="chat-container">
+        <div class="chat-header">
+          <div class="chat-ai-icon"><i class="fas fa-robot"></i></div>
+          <div>
+            <div style="font-weight:700;font-size:0.95rem;">SmartEdu AI</div>
+            <div class="chat-status"><span class="status-dot"></span> Online — Ready to help</div>
+          </div>
+          <div style="margin-left:auto;display:flex;gap:8px;align-items:center;">
+            <div style="background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.2);color:var(--primary-light);padding:6px 12px;border-radius:8px;font-size:0.8rem;"><i class="fas fa-bolt"></i> NLP Powered</div>
+            <button class="btn-ghost" style="padding:8px 14px;font-size:0.82rem;" onclick="toggleFocusMode(this)"><i class="fas fa-brain"></i> Focus Mode</button>
+          </div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+          <div class="message">
+            <div class="msg-avatar ai"><i class="fas fa-robot"></i></div>
+            <div class="msg-bubble ai">
+              <strong>Hello, Priya! 👋</strong><br/>I'm your SmartEdu AI assistant. I can help you with:<br/><br/>
+              📚 <strong>Subject doubts</strong> — DSA, DBMS, CN, OS, SE & more<br/>
+              📝 <strong>Concept explanations</strong> — in simple, exam-ready language<br/>
+              💡 <strong>Study tips</strong> and time management strategies<br/>
+              🔗 <strong>Resource recommendations</strong> and past paper guidance<br/><br/>
+              What would you like to learn today?
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-input-area">
+          <div class="chat-chips" id="chatChips">
+            <span class="chip" onclick="sendChip(this)">Explain Binary Search Trees</span>
+            <span class="chip" onclick="sendChip(this)">What is a Foreign Key in DBMS?</span>
+            <span class="chip" onclick="sendChip(this)">OSI vs TCP/IP Model</span>
+            <span class="chip" onclick="sendChip(this)">Deadlock in Operating Systems</span>
+            <span class="chip" onclick="sendChip(this)">SDLC Models comparison</span>
+            <span class="chip" onclick="sendChip(this)">Best study tips for exams</span>
+          </div>
+          <div class="chat-input-row">
+            <textarea class="chat-input" id="chatInput" rows="1" placeholder="Ask your doubt here... (Enter to send, Shift+Enter for new line)" onkeydown="handleKey(event)"></textarea>
+            <button class="chat-send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    const responses = {
+      bst: `A <strong>Binary Search Tree (BST)</strong> is a node-based data structure where each node has at most two children.<br/><br/><strong>Key Properties:</strong><br/>• Left subtree values &lt; Node value<br/>• Right subtree values &gt; Node value<br/>• Both subtrees are also BSTs<br/><br/><strong>Time Complexities:</strong><br/>• Search / Insert / Delete: O(h) where h = height<br/>• Balanced BST: O(log n) | Skewed: O(n)<br/><br/><strong>Traversals:</strong> Inorder (L→Root→R) gives sorted output! 🎯<br/><br/><strong>Common BST Variants:</strong> AVL Tree, Red-Black Tree (self-balancing)`,
+      fk: `A <strong>Foreign Key (FK)</strong> is a column (or group of columns) that references the <strong>Primary Key</strong> of another table.<br/><br/><strong>Purpose:</strong><br/>• Enforces <em>referential integrity</em><br/>• Creates relationships between tables<br/>• Prevents orphaned/invalid records<br/><br/><strong>Example:</strong><br/><code>Student(StudentID PK, Name, Branch)</code><br/><code>Enrollment(EnrollID PK, StudentID FK, CourseID)</code><br/><br/>Here, <code>StudentID</code> in Enrollment is an FK referencing Student.<br/><br/>💡 <strong>Tip:</strong> FK constraints are checked on INSERT, UPDATE, and DELETE operations.`,
+      osi: `<strong>OSI Model</strong> (7 layers) vs <strong>TCP/IP Model</strong> (4 layers):<br/><br/><strong>OSI Layers:</strong><br/>7. Application → 6. Presentation → 5. Session → 4. Transport → 3. Network → 2. Data Link → 1. Physical<br/><br/><strong>TCP/IP Layers:</strong><br/>4. Application → 3. Transport → 2. Internet → 1. Network Access<br/><br/><strong>Key Differences:</strong><br/>• OSI = conceptual/theoretical model<br/>• TCP/IP = practical, used on the real internet<br/>• OSI has separate Session & Presentation layers; TCP/IP merges them into Application<br/><br/>🍕 Mnemonic: <em>"Please Do Not Throw Sausage Pizza Away"</em>`,
+      deadlock: `<strong>Deadlock</strong> occurs when two or more processes are waiting indefinitely for each other to release resources.<br/><br/><strong>4 Coffman Conditions (ALL must hold):</strong><br/>1. <strong>Mutual Exclusion</strong> — Only one process can use a resource at a time<br/>2. <strong>Hold & Wait</strong> — Process holds one resource and waits for more<br/>3. <strong>No Preemption</strong> — Resources can only be released voluntarily<br/>4. <strong>Circular Wait</strong> — Circular chain: P1 waits for P2, P2 waits for P1<br/><br/><strong>Handling Strategies:</strong><br/>• <strong>Prevention:</strong> Eliminate one of the 4 conditions<br/>• <strong>Avoidance:</strong> Banker's Algorithm<br/>• <strong>Detection & Recovery:</strong> Resource Allocation Graph<br/>• <strong>Ignorance:</strong> Ostrich Algorithm 🦴`,
+      sdlc: `<strong>SDLC Models — Quick Comparison:</strong><br/><br/>1. <strong>Waterfall</strong> — Sequential, rigid. Best for: fixed, well-defined requirements<br/>2. <strong>Agile</strong> — Iterative sprints (2–4 weeks). Best for: dynamic, evolving projects<br/>3. <strong>Spiral</strong> — Risk-driven repeated cycles. Best for: large, risky projects<br/>4. <strong>V-Model</strong> — Testing at every stage (verification & validation)<br/>5. <strong>Prototype</strong> — Build a prototype first, refine based on feedback<br/>6. <strong>RAD</strong> — Rapid Application Development, high-speed delivery<br/><br/>📋 <strong>Exam Tip:</strong> Always know Waterfall vs Agile — that's a guaranteed question!`,
+      study: `<strong>Top Study Strategies for Exams:</strong><br/><br/>⏰ <strong>Spaced Repetition</strong> — Review: 1 day, 3 days, 1 week, 1 month apart<br/>🧠 <strong>Active Recall</strong> — Test yourself instead of passive re-reading<br/>🍅 <strong>Pomodoro Technique</strong> — 25 min study + 5 min break<br/>📝 <strong>Mind Maps</strong> — Visualise concept connections<br/>📄 <strong>Past Papers</strong> — Best exam prep tool (pattern recognition!)<br/>😴 <strong>Sleep</strong> — Memory consolidation happens during sleep (8h)<br/>🎯 <strong>Chunking</strong> — Break topics into small, manageable pieces<br/><br/>For your upcoming <strong>DBMS mid-sem</strong>: Focus on Normalization (1NF→BCNF), SQL queries with JOINs, and ER diagrams. You've got this! 💪`
+    };
+
+    let quizActive = false;
+    function getResponse(text) {
+      const t = text.toLowerCase();
+      const hindi = /\b(kya|kaise|samjhao|samjha|batao|hindi|mein|mujhe|hai)\b/i.test(t);
+      if (quizActive) {
+        quizActive = false;
+        const answers = [t.includes('2nf') || t.includes('second normal'), t.includes('matching') || t.includes('both table') || t.includes('common rows'), t.includes('yes') || t.includes('null')];
+        const score = answers.filter(Boolean).length;
+        return `<strong>Quiz result: ${score}/3</strong><br><br>1. 2NF removes partial dependency.<br>2. INNER JOIN returns rows with matching values in both tables.<br>3. Yes, a foreign key can be NULL unless the column is also NOT NULL.<br><br>${score === 3 ? 'Excellent work!' : 'Review these points, then ask me for another quiz.'}`;
+      }
+      if (t === 'hi' || t.includes('hello') || t.includes('namaste')) return 'Hi! I can explain a concept, make a short quiz, build a study plan, or help you review DSA, DBMS, Networks, OS and Software Engineering. What are you working on?';
+      if (t.includes('quiz') || t.includes('test me')) { quizActive = true; return 'Quick DBMS quiz 🧠<br><br><strong>1.</strong> Which normal form removes partial dependency?<br><strong>2.</strong> What does an INNER JOIN return?<br><strong>3.</strong> Can a foreign key contain NULL?<br><br>Reply with your answers and I’ll score them.'; }
+      if (t.includes('plan') || t.includes('timetable') || t.includes('schedule') || t.includes('padhai ka')) return hindi ? 'Padhai ka simple plan: 25 minute ek concept samjho, 5 minute break lo, 25 minute questions solve karo, phir 10 minute break. Aakhir mein jo mushkil laga use note karo. Apne subjects aur available time batao, main plan ko uske hisaab se bana dunga.' : 'A focused study plan: 25 minutes reviewing one concept, 5 minute break, 25 minutes of practice questions, 10 minute break, then repeat. Finish by writing down what you still find difficult. Tell me your subjects and available time for a tailored plan.';
+      if (t.includes('gpa') || t.includes('cgpa') || t.includes('my attendance')) return 'Open your Dashboard to see your latest attendance and grade data. Share those numbers here and I can help explain them and suggest practical next steps.';
+      if (hindi && (t.includes('deadlock') || t.includes('coffman'))) return '<strong>Deadlock</strong> tab hota hai jab processes ek doosre ke resources ka intezar karte rehte hain aur koi aage nahi badh pata.<br><br>Iske 4 conditions hain: mutual exclusion, hold and wait, no preemption, aur circular wait. Bankers algorithm deadlock avoidance ke liye use hota hai.';
+      if (hindi && (t.includes('binary') || t.includes('bst') || t.includes('tree'))) return '<strong>Binary Search Tree (BST)</strong> mein har node ke left subtree ki values chhoti aur right subtree ki values badi hoti hain. Inorder traversal karne par values sorted order mein milti hain. Balanced BST mein search, insert aur delete aam taur par O(log n) lete hain.';
+      if (hindi && (t.includes('foreign key') || t.includes('referential'))) return '<strong>Foreign key</strong> ek table ka column hota hai jo doosre table ki primary key ko refer karta hai. Isse tables ke beech relation banta hai aur invalid references roke jaate hain.';
+      if (t.includes('binary') || t.includes('bst') || t.includes('tree')) return responses.bst;
+      if (t.includes('foreign') || t.includes('fk') || t.includes('referential')) return responses.fk;
+      if (t.includes('osi') || t.includes('tcp') || t.includes('network model')) return responses.osi;
+      if (t.includes('deadlock') || t.includes('coffman')) return responses.deadlock;
+      if (t.includes('sdlc') || t.includes('software development') || t.includes('agile') || t.includes('waterfall')) return responses.sdlc;
+      if (t.includes('study') || t.includes('tip') || t.includes('exam') || t.includes('strategy')) return responses.study;
+      return `I understand you're asking about: <strong>"${escapeChatHtml(text)}"</strong><br/><br/>That's a great topic to explore! Here's what I suggest:<br/><br/>📖 Check the <a href="resources.html" style="color:var(--primary-light)">Resources section</a> for notes and video lectures on this topic<br/>🧪 Practice with past papers available in the repository<br/>💬 If you need a more detailed explanation, try rephrasing with more context<br/><br/>💡 <strong>Quick tip:</strong> Break complex topics into smaller sub-concepts and master each one step by step — that's the most effective learning strategy!`;
+    }
+
+    function escapeChatHtml(value) {
+      return String(value).replace(/[&<>"']/g, ch => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[ch]);
+    }
+
+    function addMessage(text, isUser, trustedHtml = false) {
+      const msgs = document.getElementById('chatMessages');
+      const div = document.createElement('div');
+      div.className = 'message' + (isUser ? ' user' : '');
+      const content = isUser || !trustedHtml ? escapeChatHtml(text).replace(/\n/g, '<br>') : text;
+      div.innerHTML = `<div class="msg-avatar ${isUser?'user':'ai'}"><i class="fas fa-${isUser?'user':'robot'}"></i></div><div class="msg-bubble ${isUser?'user':'ai'}">${content}</div>`;
+      msgs.appendChild(div);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function showTyping() {
+      const msgs = document.getElementById('chatMessages');
+      const div = document.createElement('div');
+      div.className = 'message'; div.id = 'typing';
+      div.innerHTML = '<div class="msg-avatar ai"><i class="fas fa-robot"></i></div><div class="msg-bubble ai"><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>';
+      msgs.appendChild(div);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      addMessage(text, true);
+      showTyping();
+      setTimeout(async () => {
+        document.getElementById('typing')?.remove();
+        const reply = getResponse(text);
+        addMessage(reply, false, true);
+        const user = getCurrentUser();
+        if (user) await Chat.save(user.id, text, reply);
+      }, 1000 + Math.random() * 800);
+    }
+
+    function sendChip(el) {
+      document.getElementById('chatInput').value = el.textContent;
+      sendMessage();
+    }
+
+    function toggleFocusMode(button) {
+      const chips = document.getElementById('chatChips');
+      const enabled = button.dataset.enabled !== 'true';
+      button.dataset.enabled = String(enabled);
+      if (chips) chips.hidden = enabled;
+      button.innerHTML = enabled ? '<i class="fas fa-brain"></i> Exit Focus' : '<i class="fas fa-brain"></i> Focus Mode';
+      showToast(enabled ? 'Focus mode enabled' : 'Focus mode disabled', 'info');
+    }
+
+    function handleKey(e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    }
+
+    async function clearChat() {
+      document.getElementById('chatMessages').innerHTML = '<div class="message"><div class="msg-avatar ai"><i class="fas fa-robot"></i></div><div class="msg-bubble ai">Chat cleared! I\'m ready to help you again. What would you like to learn? 😊</div></div>';
+      const user = getCurrentUser();
+      const result = user ? await Chat.clear(user.id) : { ok: true };
+      showToast(result.ok ? 'Chat history cleared' : 'Could not clear saved chat history.', result.ok ? 'success' : 'error');
+    }
+
+    async function saveChat() {
+      const user = getCurrentUser();
+      if (!user) { showToast('Please sign in to save chat history.', 'error'); return; }
+      const result = await Chat.getHistory(user.id);
+      showToast(result.ok ? 'Chat history is saved to your account.' : 'Could not save chat history.', result.ok ? 'success' : 'error');
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = getCurrentUser();
+      const greeting = document.querySelector('#chatMessages .msg-bubble.ai strong');
+      if (greeting && user?.name) greeting.textContent = `Hello, ${user.name.split(' ')[0]}! 👋`;
+      if (!user) return;
+      const result = await Chat.getHistory(user.id);
+      if (!result.ok || !result.data.length) return;
+      const messages = document.getElementById('chatMessages');
+      messages.innerHTML = '';
+      result.data.reverse().forEach(item => { addMessage(item.message, true); addMessage(item.response, false); });
+    });
+
+    function setTopic(t) {
+      document.getElementById('chatInput').value = 'Tell me about ' + t;
+      document.getElementById('chatInput').focus();
+    }
+  </script>
+</body>
+</html>
+

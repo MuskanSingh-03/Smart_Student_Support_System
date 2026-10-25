@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>SmartEdu — Student Support System</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a class="nav-brand" href="index.html">
+        <div class="brand-icon"><i class="fas fa-graduation-cap"></i></div>
+        <span class="brand-name">SmartEdu</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link active">Home</a></li>
+        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+        <li><a href="chatbot.html" class="nav-link">AI Assistant</a></li>
+        <li><a href="resources.html" class="nav-link">Resources</a></li>
+        <li><a href="attendance.html" class="nav-link">Attendance</a></li>
+        <li><a href="notices.html" class="nav-link">Notices</a></li>
+        <li><a href="faculty.html" class="nav-link">Faculty</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-ghost" onclick="window.location.href='login.html'">Log In</button>
+        <button class="btn-primary" onclick="window.location.href='register.html'">Get Started</button>
+        <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="hero-blob blob-1"></div>
+      <div class="hero-blob blob-2"></div>
+      <div class="hero-blob blob-3"></div>
+      <div class="floating-shapes">
+        <div class="shape shape-1"><i class="fas fa-book-open"></i></div>
+        <div class="shape shape-2"><i class="fas fa-brain"></i></div>
+        <div class="shape shape-3"><i class="fas fa-chart-line"></i></div>
+        <div class="shape shape-4"><i class="fas fa-users"></i></div>
+        <div class="shape shape-5"><i class="fas fa-lightbulb"></i></div>
+      </div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        AI-Powered Education Platform
+      </div>
+      <h1 class="hero-title">
+        Your Smartest<br />
+        <span class="gradient-text">Academic Companion</span>
+      </h1>
+      <p class="hero-subtitle">
+        24×7 AI-powered doubt resolution, real-time performance tracking, personalised
+        guidance, and instant access to institutional resources — all in one place.
+      </p>
+      <div class="hero-actions">
+        <a href="register.html" class="btn-hero-primary">
+          <i class="fas fa-rocket"></i> Start for Free
+        </a>
+        <a href="dashboard.html" class="btn-hero-secondary">
+          <i class="fas fa-play-circle"></i> View Demo
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num" data-target="12500">0</span><span class="stat-label">Students</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num" data-target="98">0</span><span class="stat-plus">%</span><span class="stat-label">Satisfaction</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num" data-target="350">0</span><span class="stat-label">Faculty Members</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num" data-target="24">0</span><span class="stat-x">×7</span><span class="stat-label">AI Support</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="dashboard-preview">
+        <div class="preview-header">
+          <div class="preview-dots">
+            <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+          </div>
+          <span class="preview-title">Student Dashboard</span>
+        </div>
+        <div class="preview-body">
+          <div class="preview-sidebar">
+            <div class="prev-menu active"><i class="fas fa-home"></i></div>
+            <div class="prev-menu"><i class="fas fa-chart-bar"></i></div>
+            <div class="prev-menu"><i class="fas fa-robot"></i></div>
+            <div class="prev-menu"><i class="fas fa-book"></i></div>
+            <div class="prev-menu"><i class="fas fa-bell"></i></div>
+          </div>
+          <div class="preview-main">
+            <div class="prev-card blue">
+              <span class="prev-card-val">87%</span>
+              <span class="prev-card-lbl">Attendance</span>
+            </div>
+            <div class="prev-card purple">
+              <span class="prev-card-val">7.9</span>
+              <span class="prev-card-lbl">CGPA</span>
+            </div>
+            <div class="prev-chart">
+              <div class="bar" style="height:55%"></div>
+              <div class="bar" style="height:70%"></div>
+              <div class="bar" style="height:60%"></div>
+              <div class="bar" style="height:85%"></div>
+              <div class="bar" style="height:75%"></div>
+              <div class="bar active" style="height:90%"></div>
+            </div>
+            <div class="prev-ai">
+              <i class="fas fa-robot"></i>
+              <span>AI: How can I help you today?</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES SECTION -->
+  <section class="features-section" id="features">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">Core Features</div>
+        <h2 class="section-title">Everything a Student Needs, <span class="gradient-text">In One Place</span></h2>
+        <p class="section-subtitle">SmartEdu combines AI, data analytics, and thoughtful design to transform how students learn and get support.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card card-blue" onclick="window.location.href='chatbot.html'">
+          <div class="feature-icon"><i class="fas fa-robot"></i></div>
+          <h3>AI Doubt Assistant</h3>
+          <p>Get instant answers to academic queries 24×7. Our NLP-powered chatbot resolves doubts across subjects with contextual accuracy.</p>
+          <div class="feature-tags">
+            <span class="tag">NLP</span><span class="tag">24×7</span><span class="tag">Multi-Subject</span>
+          </div>
+          <div class="feature-arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+        <div class="feature-card card-purple" onclick="window.location.href='dashboard.html'">
+          <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+          <h3>Performance Tracker</h3>
+          <p>Visual grade analytics, subject-wise performance breakdown, trend analysis, and AI-generated improvement suggestions.</p>
+          <div class="feature-tags">
+            <span class="tag">Analytics</span><span class="tag">AI Insights</span><span class="tag">Real-time</span>
+          </div>
+          <div class="feature-arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+        <div class="feature-card card-green" onclick="window.location.href='attendance.html'">
+          <div class="feature-icon"><i class="fas fa-calendar-check"></i></div>
+          <h3>Attendance Monitor</h3>
+          <p>Track attendance per subject, receive early-warning alerts when below threshold, and view graphical attendance history.</p>
+          <div class="feature-tags">
+            <span class="tag">Alerts</span><span class="tag">Visual</span><span class="tag">Auto-Track</span>
+          </div>
+          <div class="feature-arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+        <div class="feature-card card-orange" onclick="window.location.href='resources.html'">
+          <div class="feature-icon"><i class="fas fa-book-open"></i></div>
+          <h3>Resource Repository</h3>
+          <p>Centralized library of notes, past papers, video lectures, assignments, and curated study material by subject.</p>
+          <div class="feature-tags">
+            <span class="tag">Notes</span><span class="tag">Videos</span><span class="tag">Past Papers</span>
+          </div>
+          <div class="feature-arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+        <div class="feature-card card-pink" onclick="window.location.href='notices.html'">
+          <div class="feature-icon"><i class="fas fa-bell"></i></div>
+          <h3>Smart Notifications</h3>
+          <p>Real-time alerts for exam schedules, fee deadlines, faculty announcements, and personalised reminders.</p>
+          <div class="feature-tags">
+            <span class="tag">Real-time</span><span class="tag">Personalised</span><span class="tag">Push</span>
+          </div>
+          <div class="feature-arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+        <div class="feature-card card-teal" onclick="window.location.href='faculty.html'">
+          <div class="feature-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+          <h3>Faculty Portal</h3>
+          <p>Faculty dashboard to post resources, manage attendance, view class analytics, and communicate with students.</p>
+          <div class="feature-tags">
+            <span class="tag">Dashboard</span><span class="tag">Analytics</span><span class="tag">Communication</span>
+          </div>
+          <div class="feature-arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">How It Works</div>
+        <h2 class="section-title">Simple, <span class="gradient-text">Seamless Experience</span></h2>
+      </div>
+      <div class="steps-container">
+        <div class="step">
+          <div class="step-number">01</div>
+          <div class="step-icon"><i class="fas fa-user-plus"></i></div>
+          <h3>Register</h3>
+          <p>Create your student account with your institutional email in under 2 minutes.</p>
+        </div>
+        <div class="step-connector"><i class="fas fa-chevron-right"></i></div>
+        <div class="step">
+          <div class="step-number">02</div>
+          <div class="step-icon"><i class="fas fa-sliders-h"></i></div>
+          <h3>Personalise</h3>
+          <p>Set your courses, semester, and learning goals for a tailored experience.</p>
+        </div>
+        <div class="step-connector"><i class="fas fa-chevron-right"></i></div>
+        <div class="step">
+          <div class="step-number">03</div>
+          <div class="step-icon"><i class="fas fa-robot"></i></div>
+          <h3>Ask & Learn</h3>
+          <p>Use the AI assistant for instant doubt resolution anytime, anywhere.</p>
+        </div>
+        <div class="step-connector"><i class="fas fa-chevron-right"></i></div>
+        <div class="step">
+          <div class="step-number">04</div>
+          <div class="step-icon"><i class="fas fa-chart-pie"></i></div>
+          <h3>Track & Improve</h3>
+          <p>Monitor performance and attendance, and act on AI-driven insights.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SDG SECTION -->
+  <section class="sdg-section">
+    <div class="container">
+      <div class="sdg-card">
+        <div class="sdg-left">
+          <div class="sdg-badge">SDG 4 Aligned</div>
+          <h2>Quality Education for <span class="gradient-text">Every Student</span></h2>
+          <p>SmartEdu is designed with the United Nations Sustainable Development Goal 4 in mind — ensuring inclusive, equitable, and quality education and promoting lifelong learning opportunities for all.</p>
+          <ul class="sdg-list">
+            <li><i class="fas fa-check-circle"></i> Bridges faculty–student ratio gaps</li>
+            <li><i class="fas fa-check-circle"></i> 24×7 equal access to academic support</li>
+            <li><i class="fas fa-check-circle"></i> Early identification of at-risk students</li>
+            <li><i class="fas fa-check-circle"></i> Inclusive design for all learner types</li>
+          </ul>
+        </div>
+        <div class="sdg-right">
+          <div class="sdg-icon-grid">
+            <div class="sdg-ico"><i class="fas fa-globe-asia"></i><span>Inclusive</span></div>
+            <div class="sdg-ico"><i class="fas fa-balance-scale"></i><span>Equitable</span></div>
+            <div class="sdg-ico"><i class="fas fa-award"></i><span>Quality</span></div>
+            <div class="sdg-ico"><i class="fas fa-infinity"></i><span>Lifelong</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">Testimonials</div>
+        <h2 class="section-title">Loved by <span class="gradient-text">Students & Faculty</span></h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>"The AI assistant saved me countless hours. I get answers to tricky DSA problems instantly instead of waiting for the next lecture!"</p>
+          <div class="testimonial-author">
+            <div class="author-avatar blue">P</div>
+            <div><strong>Priya Sharma</strong><span>B.Tech CSE, 3rd Year</span></div>
+          </div>
+        </div>
+        <div class="testimonial-card featured">
+          <div class="stars">★★★★★</div>
+          <p>"Attendance alerts literally saved my semester. I was unaware I was close to the 75% threshold until SmartEdu notified me!"</p>
+          <div class="testimonial-author">
+            <div class="author-avatar purple">R</div>
+            <div><strong>Rahul Mehta</strong><span>BCA, 2nd Year</span></div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>"As a faculty, I love the dashboard — I can see at-risk students in one glance and reach out proactively. Brilliant tool!"</p>
+          <div class="testimonial-author">
+            <div class="author-avatar green">D</div>
+            <div><strong>Dr. Anita Desai</strong><span>Professor, Mathematics</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-glow"></div>
+        <h2>Ready to Transform Your <span class="gradient-text">Academic Journey?</span></h2>
+        <p>Join thousands of students already using SmartEdu for smarter, stress-free learning.</p>
+        <div class="cta-actions">
+          <a href="register.html" class="btn-hero-primary"><i class="fas fa-rocket"></i> Get Started Free</a>
+          <a href="chatbot.html" class="btn-hero-secondary"><i class="fas fa-robot"></i> Try AI Assistant</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="nav-brand" href="index.html">
+            <div class="brand-icon small"><i class="fas fa-graduation-cap"></i></div>
+            <span class="brand-name">SmartEdu</span>
+          </a>
+          <p>AI-powered student support platform for modern educational institutions.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Platform</h4>
+          <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="chatbot.html">AI Assistant</a></li>
+            <li><a href="resources.html">Resources</a></li>
+            <li><a href="attendance.html">Attendance</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>For Faculty</h4>
+          <ul>
+            <li><a href="faculty.html">Faculty Portal</a></li>
+            <li><a href="notices.html">Announcements</a></li>
+            <li><a href="#">Class Analytics</a></li>
+            <li><a href="#">Upload Material</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Help Centre</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Contact Us</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 SmartEdu. Designed with ❤️ for students everywhere. Aligned with UN SDG 4.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
+

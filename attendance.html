@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Attendance — SmartEdu</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-container">
+      <a class="nav-brand" href="index.html"><div class="brand-icon"><i class="fas fa-graduation-cap"></i></div><span class="brand-name">SmartEdu</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+        <li><a href="chatbot.html" class="nav-link">AI Assistant</a></li>
+        <li><a href="resources.html" class="nav-link">Resources</a></li>
+        <li><a href="attendance.html" class="nav-link active">Attendance</a></li>
+        <li><a href="notices.html" class="nav-link">Notices</a></li>
+        <li><a href="faculty.html" class="nav-link">Faculty</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-ghost" id="navUserBtn" style="display:flex;align-items:center;gap:8px;"></button>
+        <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-layout">
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Navigation</div>
+        <a href="dashboard.html" class="sidebar-link"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="chatbot.html" class="sidebar-link"><i class="fas fa-robot"></i> AI Assistant</a>
+        <a href="resources.html" class="sidebar-link"><i class="fas fa-book-open"></i> Resources</a>
+        <a href="attendance.html" class="sidebar-link active"><i class="fas fa-calendar-check"></i> Attendance</a>
+        <a href="notices.html" class="sidebar-link"><i class="fas fa-bell"></i> Notices</a>
+        <a href="faculty.html" class="sidebar-link"><i class="fas fa-chalkboard-teacher"></i> Faculty</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Filter Subject</div>
+        <a href="#" class="sidebar-link" onclick="filterSubject('all')"><i class="fas fa-list"></i> All Subjects</a>
+        <a href="#" class="sidebar-link" onclick="filterSubject('dsa')"><i class="fas fa-code"></i> DSA</a>
+        <a href="#" class="sidebar-link" onclick="filterSubject('dbms')"><i class="fas fa-database"></i> DBMS</a>
+        <a href="#" class="sidebar-link" onclick="filterSubject('cn')"><i class="fas fa-network-wired"></i> CN</a>
+        <a href="#" class="sidebar-link" onclick="filterSubject('os')"><i class="fas fa-microchip"></i> OS</a>
+        <a href="#" class="sidebar-link" onclick="filterSubject('se')"><i class="fas fa-project-diagram"></i> SE</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+        <div>
+          <h1>Attendance Tracker</h1>
+          <p>Semester 5 — B.Tech CSE | Academic Year 2025-26</p>
+        </div>
+        <button class="btn-primary" onclick="showToast('Report downloaded!','success')"><i class="fas fa-download"></i> Download Report</button>
+      </div>
+
+      <div class="alert-banner alert-danger fade-in">
+        <i class="fas fa-exclamation-circle"></i>
+        <div><strong>Critical Warning:</strong> Your DBMS attendance (74%) is below the required 75% threshold. You risk being debarred from the end-semester examination. Please attend the next 2 classes to reach 76%.</div>
+      </div>
+
+      <div class="stats-row fade-in">
+        <div class="stat-card sc-green">
+          <div class="stat-card-icon"><i class="fas fa-percentage"></i></div>
+          <div class="stat-card-val">87%</div>
+          <div class="stat-card-label">Overall Attendance</div>
+          <div class="stat-card-change change-up"><i class="fas fa-check"></i> Above 75% threshold</div>
+        </div>
+        <div class="stat-card sc-blue">
+          <div class="stat-card-icon"><i class="fas fa-calendar-check"></i></div>
+          <div class="stat-card-val">125</div>
+          <div class="stat-card-label">Classes Attended</div>
+          <div class="stat-card-change" style="color:var(--text-dim);">Out of 144 total</div>
+        </div>
+        <div class="stat-card sc-orange">
+          <div class="stat-card-icon"><i class="fas fa-calendar-times"></i></div>
+          <div class="stat-card-val">19</div>
+          <div class="stat-card-label">Classes Missed</div>
+          <div class="stat-card-change change-down"><i class="fas fa-info-circle"></i> Max 2 more allowed</div>
+        </div>
+        <div class="stat-card sc-pink">
+          <div class="stat-card-icon"><i class="fas fa-clock"></i></div>
+          <div class="stat-card-val">3</div>
+          <div class="stat-card-label">Late Arrivals</div>
+          <div class="stat-card-change" style="color:var(--text-dim);">This semester</div>
+        </div>
+      </div>
+
+      <!-- VIEW SWITCHER -->
+      <div style="display:flex;gap:8px;margin-bottom:24px;">
+        <button class="tab active" id="tab-subject" onclick="switchView('subject', this)"><i class="fas fa-list"></i> Subject-wise</button>
+        <button class="tab" id="tab-daily" onclick="switchView('daily', this)"><i class="fas fa-calendar-day"></i> Daily Log</button>
+        <button class="tab" id="tab-monthly" onclick="switchView('monthly', this)"><i class="fas fa-chart-bar"></i> Monthly View</button>
+      </div>
+
+      <!-- SUBJECT VIEW -->
+      <div id="subjectView">
+        <div class="subject-list">
+          <div class="subject-item" data-subj="dsa">
+            <div class="subj-row">
+              <div>
+                <div class="subj-name">Data Structures & Algorithms</div>
+                <div style="font-size:0.78rem;color:var(--text-dim);">Prof. Ramesh Kumar · Mon, Wed, Fri · 9:00 AM · Room 301</div>
+              </div>
+              <span class="subj-percent att-good">92%</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill pf-green" style="width:92%"></div></div>
+            <div class="subj-details">
+              <span><i class="fas fa-check" style="color:var(--success);"></i> 33 attended</span>
+              <span><i class="fas fa-times" style="color:var(--danger);"></i> 3 missed</span>
+              <span><i class="fas fa-list"></i> 36 total</span>
+              <span style="color:var(--success);"><i class="fas fa-shield-alt"></i> Safe (need 0 more)</span>
+            </div>
+          </div>
+          <div class="subject-item" data-subj="dbms" style="border-color:rgba(239,68,68,0.3);">
+            <div class="subj-row">
+              <div>
+                <div class="subj-name">Database Management System <span style="background:rgba(239,68,68,0.15);color:#f87171;font-size:0.72rem;font-weight:700;padding:2px 8px;border-radius:50px;margin-left:8px;">AT RISK</span></div>
+                <div style="font-size:0.78rem;color:var(--text-dim);">Prof. Anita Desai · Tue, Thu · 11:00 AM · Room 204</div>
+              </div>
+              <span class="subj-percent att-danger">74%</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill pf-danger" style="width:74%"></div></div>
+            <div style="height:4px;background:rgba(239,68,68,0.3);border-radius:2px;margin:-2px 0 8px;position:relative;"><div style="position:absolute;left:75%;top:-3px;width:2px;height:10px;background:#ef4444;"></div></div>
+            <div class="subj-details">
+              <span><i class="fas fa-check" style="color:var(--success);"></i> 17 attended</span>
+              <span><i class="fas fa-times" style="color:var(--danger);"></i> 6 missed</span>
+              <span><i class="fas fa-list"></i> 23 total</span>
+              <span style="color:var(--danger);"><i class="fas fa-exclamation-triangle"></i> Need 2 more classes!</span>
+            </div>
+          </div>
+          <div class="subject-item" data-subj="cn">
+            <div class="subj-row">
+              <div>
+                <div class="subj-name">Computer Networks</div>
+                <div style="font-size:0.78rem;color:var(--text-dim);">Prof. Suresh Patel · Mon, Wed · 2:00 PM · Lab 101</div>
+              </div>
+              <span class="subj-percent att-good">88%</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill pf-blue" style="width:88%"></div></div>
+            <div class="subj-details">
+              <span><i class="fas fa-check" style="color:var(--success);"></i> 21 attended</span>
+              <span><i class="fas fa-times" style="color:var(--danger);"></i> 3 missed</span>
+              <span><i class="fas fa-list"></i> 24 total</span>
+              <span style="color:var(--success);"><i class="fas fa-shield-alt"></i> Safe</span>
+            </div>
+          </div>
+          <div class="subject-item" data-subj="os">
+            <div class="subj-row">
+              <div>
+                <div class="subj-name">Operating Systems</div>
+                <div style="font-size:0.78rem;color:var(--text-dim);">Prof. Preethi Iyer · Tue, Thu, Sat · 8:00 AM · Room 105</div>
+              </div>
+              <span class="subj-percent att-good">95%</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill pf-green" style="width:95%"></div></div>
+            <div class="subj-details">
+              <span><i class="fas fa-check" style="color:var(--success);"></i> 35 attended</span>
+              <span><i class="fas fa-times" style="color:var(--danger);"></i> 2 missed</span>
+              <span><i class="fas fa-list"></i> 37 total</span>
+              <span style="color:var(--success);"><i class="fas fa-shield-alt"></i> Excellent</span>
+            </div>
+          </div>
+          <div class="subject-item" data-subj="se">
+            <div class="subj-row">
+              <div>
+                <div class="subj-name">Software Engineering</div>
+                <div style="font-size:0.78rem;color:var(--text-dim);">Prof. Vikram Singh · Wed, Fri · 3:00 PM · Room 302</div>
+              </div>
+              <span class="subj-percent att-warn">79%</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill pf-orange" style="width:79%"></div></div>
+            <div class="subj-details">
+              <span><i class="fas fa-check" style="color:var(--success);"></i> 19 attended</span>
+              <span><i class="fas fa-times" style="color:var(--danger);"></i> 5 missed</span>
+              <span><i class="fas fa-list"></i> 24 total</span>
+              <span style="color:var(--warning);"><i class="fas fa-exclamation-circle"></i> Be careful (4 more allowed)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DAILY LOG VIEW -->
+      <div id="dailyView" style="display:none;">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+            <h3 style="font-size:1rem;font-weight:700;">Daily Attendance Log</h3>
+            <div class="search-bar" style="padding:8px 14px;"><i class="fas fa-search"></i><input type="text" placeholder="Search date or subject..." /></div>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr><th>Date</th><th>Subject</th><th>Time</th><th>Faculty</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Oct 05, 2026</td><td>DSA</td><td>9:00 AM</td><td>Prof. Ramesh Kumar</td><td><span class="status-pill sp-present">Present</span></td></tr>
+              <tr><td>Oct 05, 2026</td><td>CN</td><td>2:00 PM</td><td>Prof. Suresh Patel</td><td><span class="status-pill sp-present">Present</span></td></tr>
+              <tr><td>Oct 04, 2026</td><td>DBMS</td><td>11:00 AM</td><td>Prof. Anita Desai</td><td><span class="status-pill sp-absent">Absent</span></td></tr>
+              <tr><td>Oct 04, 2026</td><td>OS</td><td>8:00 AM</td><td>Prof. Preethi Iyer</td><td><span class="status-pill sp-present">Present</span></td></tr>
+              <tr><td>Oct 03, 2026</td><td>SE</td><td>3:00 PM</td><td>Prof. Vikram Singh</td><td><span class="status-pill sp-late">Late</span></td></tr>
+              <tr><td>Oct 03, 2026</td><td>DSA</td><td>9:00 AM</td><td>Prof. Ramesh Kumar</td><td><span class="status-pill sp-present">Present</span></td></tr>
+              <tr><td>Oct 02, 2026</td><td>DBMS</td><td>11:00 AM</td><td>Prof. Anita Desai</td><td><span class="status-pill sp-absent">Absent</span></td></tr>
+              <tr><td>Oct 02, 2026</td><td>OS</td><td>8:00 AM</td><td>Prof. Preethi Iyer</td><td><span class="status-pill sp-present">Present</span></td></tr>
+              <tr><td>Oct 01, 2026</td><td>DSA</td><td>9:00 AM</td><td>Prof. Ramesh Kumar</td><td><span class="status-pill sp-present">Present</span></td></tr>
+              <tr><td>Sep 30, 2026</td><td>DBMS</td><td>11:00 AM</td><td>Prof. Anita Desai</td><td><span class="status-pill sp-absent">Absent</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- MONTHLY VIEW -->
+      <div id="monthlyView" style="display:none;">
+        <div class="card">
+          <h3 style="font-size:1rem;font-weight:700;margin-bottom:20px;">Monthly Attendance Overview</h3>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:24px;">
+            <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:12px;padding:20px;text-align:center;">
+              <div style="font-size:1.8rem;font-weight:800;color:#10b981;font-family:'Poppins',sans-serif;">92%</div>
+              <div style="font-size:0.85rem;color:var(--text-muted);margin-top:4px;">July 2026</div>
+              <div style="font-size:0.75rem;color:var(--success);margin-top:4px;"><i class="fas fa-check"></i> 44/48 classes</div>
+            </div>
+            <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:12px;padding:20px;text-align:center;">
+              <div style="font-size:1.8rem;font-weight:800;color:#10b981;font-family:'Poppins',sans-serif;">88%</div>
+              <div style="font-size:0.85rem;color:var(--text-muted);margin-top:4px;">August 2026</div>
+              <div style="font-size:0.75rem;color:var(--success);margin-top:4px;"><i class="fas fa-check"></i> 42/48 classes</div>
+            </div>
+            <div style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:12px;padding:20px;text-align:center;">
+              <div style="font-size:1.8rem;font-weight:800;color:#f59e0b;font-family:'Poppins',sans-serif;">81%</div>
+              <div style="font-size:0.85rem;color:var(--text-muted);margin-top:4px;">September 2026</div>
+              <div style="font-size:0.75rem;color:var(--warning);margin-top:4px;"><i class="fas fa-exclamation"></i> 39/48 classes</div>
+            </div>
+            <div style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);border-radius:12px;padding:20px;text-align:center;">
+              <div style="font-size:1.8rem;font-weight:800;color:#6366f1;font-family:'Poppins',sans-serif;">87%</div>
+              <div style="font-size:0.85rem;color:var(--text-muted);margin-top:4px;">October 2026</div>
+              <div style="font-size:0.75rem;color:var(--primary);margin-top:4px;"><i class="fas fa-clock"></i> Ongoing</div>
+            </div>
+          </div>
+          <div class="alert-banner alert-warning">
+            <i class="fas fa-lightbulb"></i>
+            <div><strong>AI Insight:</strong> Your attendance dropped in September. The pattern shows you missed classes mostly on Thursdays. Try setting a recurring reminder for your DBMS Thursday lecture!</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    function switchView(view, btn) {
+      ['subjectView','dailyView','monthlyView'].forEach(v => document.getElementById(v).style.display = 'none');
+      document.getElementById(view + 'View').style.display = 'block';
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+    }
+    function filterSubject(s) {
+      document.querySelectorAll('.subject-item').forEach(el => {
+        el.style.display = (s === 'all' || el.dataset.subj === s) ? '' : 'none';
+      });
+    }
+
+    // Load live attendance from API
+    async function loadAttendance() {
+      const user = getCurrentUser();
+      const studentId = user ? user.id : 6; // default to Priya (id=6) in demo
+      const r = await Attendance.getByStudent(studentId);
+      if (r.ok && r.data.subjects) {
+        renderAttendanceSubjects(r.data.subjects, 'subjectView');
+        const ov = r.data.overall;
+        if (ov) {
+          document.querySelectorAll('.stat-card-val')[0].textContent = (ov.percentage || 0) + '%';
+          document.querySelectorAll('.stat-card-val')[1].textContent = ov.present || 0;
+          document.querySelectorAll('.stat-card-val')[2].textContent = (ov.total - ov.present) || 0;
+        }
+      }
+      const logR = await Attendance.getLog(studentId);
+      if (logR.ok) {
+        const tbody = document.querySelector('#dailyView tbody');
+        if (tbody && logR.data.length) {
+          tbody.innerHTML = logR.data.map(row => `
+            <tr>
+              <td>${new Date(row.date).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})}</td>
+              <td>${row.subject_name}</td>
+              <td>${row.code}</td>
+              <td>${row.faculty_name || '—'}</td>
+              <td><span class="status-pill sp-${row.status}">${row.status.charAt(0).toUpperCase()+row.status.slice(1)}</span></td>
+            </tr>`).join('');
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadAttendance);
+  </script>
+</body>
+</html>
+
