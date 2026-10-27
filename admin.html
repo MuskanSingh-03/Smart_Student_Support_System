@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Administrator Portal - SmartEdu</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-container">
+      <a class="nav-brand" href="admin.html"><div class="brand-icon"><i class="fas fa-book-open"></i></div><span class="brand-name">SmartEdu</span></a>
+      <ul class="nav-links"><li><a class="nav-link active" href="admin.html">Admin Portal</a></li><li><a class="nav-link" href="resources.html">Resources</a></li><li><a class="nav-link" href="notices.html">Notices</a></li></ul>
+      <div class="nav-actions"><span style="font-size:.85rem;color:var(--text-muted);">Administrator</span><button class="btn-ghost" onclick="Auth.logout()"><i class="fas fa-sign-out-alt"></i> Sign out</button></div>
+    </div>
+  </nav>
+  <div class="page-layout">
+    <aside class="sidebar">
+      <div class="sidebar-section"><div class="sidebar-label">Administration</div><a href="#overview" class="sidebar-link active"><i class="fas fa-chart-pie"></i> Overview</a><a href="#users" class="sidebar-link"><i class="fas fa-users"></i> Accounts</a><a href="#content" class="sidebar-link"><i class="fas fa-bullhorn"></i> Notices & Resources</a><a href="#attendance" class="sidebar-link"><i class="fas fa-calendar-check"></i> Attendance</a></div>
+    </aside>
+    <main class="main-content">
+      <section id="overview">
+        <div class="page-header"><h1>Administrator Portal</h1><p>Manage accounts, campus notices, study resources, and attendance.</p></div>
+        <div class="stats-row">
+          <div class="stat-card sc-blue"><div class="stat-card-icon"><i class="fas fa-user-graduate"></i></div><div class="stat-card-val" id="statStudents">-</div><div class="stat-card-label">Students</div></div>
+          <div class="stat-card sc-purple"><div class="stat-card-icon"><i class="fas fa-chalkboard-teacher"></i></div><div class="stat-card-val" id="statFaculty">-</div><div class="stat-card-label">Faculty</div></div>
+          <div class="stat-card sc-orange"><div class="stat-card-icon"><i class="fas fa-book"></i></div><div class="stat-card-val" id="statResources">-</div><div class="stat-card-label">Resources</div></div>
+          <div class="stat-card sc-pink"><div class="stat-card-icon"><i class="fas fa-bullhorn"></i></div><div class="stat-card-val" id="statNotices">-</div><div class="stat-card-label">Notices</div></div>
+        </div>
+      </section>
+
+      <section id="users" class="card mb-6">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px;"><div><h2 style="font-size:1.1rem;">Accounts</h2><p style="color:var(--text-muted);font-size:.85rem;">Create student and faculty sign-ins and review the current roster.</p></div><button class="btn-primary" onclick="document.getElementById('createUserForm').scrollIntoView({behavior:'smooth'})"><i class="fas fa-user-plus"></i> Add account</button></div>
+        <div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Department</th><th>Roll number</th></tr></thead><tbody id="usersTable"><tr><td colspan="5">Loading accounts...</td></tr></tbody></table></div>
+        <form id="createUserForm" style="margin-top:24px;border-top:1px solid var(--border);padding-top:20px;">
+          <h3 style="font-size:1rem;margin-bottom:14px;">Create account</h3>
+          <div class="form-row"><div class="form-group"><label class="form-label" for="newName">Full name</label><input id="newName" class="form-control" required /></div><div class="form-group"><label class="form-label" for="newEmail">Email</label><input id="newEmail" class="form-control" type="email" required /></div></div>
+          <div class="form-row"><div class="form-group"><label class="form-label" for="newPassword">Temporary password</label><input id="newPassword" class="form-control" type="password" minlength="8" required /></div><div class="form-group"><label class="form-label" for="newRole">Role</label><select id="newRole" class="form-control"><option value="student">Student</option><option value="faculty">Faculty</option></select></div></div>
+          <div class="form-row"><div class="form-group"><label class="form-label" for="newDepartment">Department</label><input id="newDepartment" class="form-control" value="CSE" /></div><div class="form-group"><label class="form-label" for="newRoll">Roll number (students)</label><input id="newRoll" class="form-control" /></div></div>
+          <button class="btn-primary" type="submit"><i class="fas fa-user-plus"></i> Create account</button>
+        </form>
+      </section>
+
+      <section id="content" class="grid-2 mb-6">
+        <form id="noticeForm" class="card">
+          <h2 style="font-size:1.05rem;margin-bottom:14px;"><i class="fas fa-bullhorn" style="color:var(--primary);"></i> Publish notice</h2>
+          <div class="form-group"><label class="form-label" for="noticeTitle">Title</label><input id="noticeTitle" class="form-control" required /></div>
+          <div class="form-group"><label class="form-label" for="noticeDescription">Message</label><textarea id="noticeDescription" class="form-control" rows="4" required></textarea></div>
+          <div class="form-row"><div class="form-group"><label class="form-label" for="noticeCategory">Category</label><select id="noticeCategory" class="form-control"><option value="info">General</option><option value="exam">Exam</option><option value="urgent">Urgent</option><option value="event">Event</option></select></div><div class="form-group"><label class="form-label" for="noticePriority">Priority</label><select id="noticePriority" class="form-control"><option value="normal">Normal</option><option value="high">High</option></select></div></div>
+          <button class="btn-primary" type="submit">Publish notice</button>
+        </form>
+        <form id="resourceForm" class="card">
+          <h2 style="font-size:1.05rem;margin-bottom:14px;"><i class="fas fa-book-open" style="color:var(--purple);"></i> Add resource</h2>
+          <div class="form-group"><label class="form-label" for="resourceTitle">Title</label><input id="resourceTitle" class="form-control" required /></div>
+          <div class="form-row"><div class="form-group"><label class="form-label" for="resourceSubject">Subject</label><select id="resourceSubject" class="form-control"></select></div><div class="form-group"><label class="form-label" for="resourceType">Type</label><select id="resourceType" class="form-control"><option value="pdf">PDF notes</option><option value="paper">Past paper</option><option value="lab">Lab manual</option><option value="video">Video</option></select></div></div>
+          <div class="form-group"><label class="form-label" for="resourceDescription">Description</label><textarea id="resourceDescription" class="form-control" rows="3"></textarea></div>
+          <button class="btn-primary" type="submit">Add resource</button>
+        </form>
+      </section>
+
+      <section id="attendance" class="card mb-6">
+        <h2 style="font-size:1.05rem;margin-bottom:14px;"><i class="fas fa-calendar-check" style="color:var(--success);"></i> Record attendance</h2>
+        <form id="attendanceForm" class="form-row">
+          <div class="form-group"><label class="form-label" for="attendanceStudent">Student</label><select id="attendanceStudent" class="form-control" required></select></div>
+          <div class="form-group"><label class="form-label" for="attendanceSubject">Subject</label><select id="attendanceSubject" class="form-control" required></select></div>
+          <div class="form-group"><label class="form-label" for="attendanceDate">Date</label><input id="attendanceDate" class="form-control" type="date" required /></div>
+          <div class="form-group"><label class="form-label" for="attendanceStatus">Status</label><select id="attendanceStatus" class="form-control"><option value="present">Present</option><option value="absent">Absent</option><option value="late">Late</option></select></div>
+          <div><button class="btn-primary" type="submit">Save attendance</button></div>
+        </form>
+      </section>
+    </main>
+  </div>
+  <script src="js/api.js"></script><script src="js/main.js"></script>
+  <script>
+    const byId = id => document.getElementById(id);
+    const esc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    async function loadAdminPortal() {
+      const [stats, users, subjects] = await Promise.all([Stats.get(), Admin.getUsers(), apiCall('/subjects')]);
+      if (stats.ok) {
+        byId('statStudents').textContent = stats.data.total_students;
+        byId('statFaculty').textContent = stats.data.total_faculty;
+        byId('statResources').textContent = stats.data.total_resources;
+        byId('statNotices').textContent = stats.data.total_notices;
+      }
+      if (users.ok) {
+        const students = users.data.filter(user => user.role === 'student');
+        byId('usersTable').innerHTML = users.data.map(user => `<tr><td>${esc(user.name)}</td><td>${esc(user.email)}</td><td>${esc(user.role)}</td><td>${esc(user.department || '-')}</td><td>${esc(user.roll_no || '-')}</td></tr>`).join('');
+        byId('attendanceStudent').innerHTML = students.map(user => `<option value="${user.id}">${esc(user.name)} (${esc(user.roll_no || user.email)})</option>`).join('');
+      } else showToast(users.error, 'error');
+      if (subjects.ok) {
+        const options = subjects.data.map(subject => `<option value="${subject.id}">${esc(subject.code)} - ${esc(subject.name)}</option>`).join('');
+        byId('resourceSubject').innerHTML = '<option value="">General resource</option>' + options;
+        byId('attendanceSubject').innerHTML = options;
+      }
+      byId('attendanceDate').value = new Date().toISOString().slice(0,10);
+    }
+    byId('createUserForm').addEventListener('submit', async event => {
+      event.preventDefault();
+      const result = await Admin.createUser({name:byId('newName').value,email:byId('newEmail').value,password:byId('newPassword').value,role:byId('newRole').value,department:byId('newDepartment').value,roll_no:byId('newRoll').value});
+      showToast(result.ok ? 'Account created.' : result.error, result.ok ? 'success' : 'error');
+      if (result.ok) { event.target.reset(); byId('newDepartment').value='CSE'; await loadAdminPortal(); }
+    });
+    byId('noticeForm').addEventListener('submit', async event => {
+      event.preventDefault(); const user=getCurrentUser();
+      const result=await Notices.post({title:byId('noticeTitle').value,description:byId('noticeDescription').value,category:byId('noticeCategory').value,priority:byId('noticePriority').value,posted_by:user.id});
+      showToast(result.ok?'Notice published.':result.error,result.ok?'success':'error');
+      if(result.ok){event.target.reset();await loadAdminPortal();}
+    });
+    byId('resourceForm').addEventListener('submit', async event => {
+      event.preventDefault(); const user=getCurrentUser();
+      const result=await Resources.add({title:byId('resourceTitle').value,subject_id:byId('resourceSubject').value||null,file_type:byId('resourceType').value,uploaded_by:user.id,description:byId('resourceDescription').value});
+      showToast(result.ok?'Resource added.':result.error,result.ok?'success':'error');
+      if(result.ok){event.target.reset();await loadAdminPortal();}
+    });
+    byId('attendanceForm').addEventListener('submit', async event => {
+      event.preventDefault();
+      const result=await Attendance.mark({student_id:Number(byId('attendanceStudent').value),subject_id:Number(byId('attendanceSubject').value),date:byId('attendanceDate').value,status:byId('attendanceStatus').value});
+      showToast(result.ok?'Attendance saved.':result.error,result.ok?'success':'error');
+    });
+    document.addEventListener('DOMContentLoaded', loadAdminPortal);
+  </script>
+</body>
+</html>

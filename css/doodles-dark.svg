@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 1000" fill="none">
+  <g stroke-linecap="round" stroke-linejoin="round" stroke-width="3" opacity=".58">
+    <!-- little flowers -->
+    <g transform="translate(108 165)" stroke="#f09abd">
+      <ellipse cx="0" cy="-21" rx="9" ry="16"/><ellipse cx="20" cy="-7" rx="9" ry="16" transform="rotate(72 20 -7)"/>
+      <ellipse cx="12" cy="17" rx="9" ry="16" transform="rotate(144 12 17)"/><ellipse cx="-12" cy="17" rx="9" ry="16" transform="rotate(216 -12 17)"/>
+      <ellipse cx="-20" cy="-7" rx="9" ry="16" transform="rotate(288 -20 -7)"/><circle r="7" fill="#f2d27d" stroke="#f2d27d"/>
+      <path d="M0 27c0 24-3 42-15 58m15-32c12 1 21 8 27 17m-28-4c-12 1-19 8-24 16"/>
+    </g>
+    <g transform="translate(1294 138) scale(.78)" stroke="#b9a8f2">
+      <ellipse cx="0" cy="-21" rx="9" ry="16"/><ellipse cx="20" cy="-7" rx="9" ry="16" transform="rotate(72 20 -7)"/>
+      <ellipse cx="12" cy="17" rx="9" ry="16" transform="rotate(144 12 17)"/><ellipse cx="-12" cy="17" rx="9" ry="16" transform="rotate(216 -12 17)"/>
+      <ellipse cx="-20" cy="-7" rx="9" ry="16" transform="rotate(288 -20 -7)"/><circle r="7" fill="#f2d27d" stroke="#f2d27d"/>
+      <path d="M0 27c0 24-3 42-15 58m15-32c12 1 21 8 27 17"/>
+    </g>
+    <g transform="translate(190 815) scale(.66)" stroke="#f0c28a">
+      <ellipse cx="0" cy="-21" rx="9" ry="16"/><ellipse cx="20" cy="-7" rx="9" ry="16" transform="rotate(72 20 -7)"/>
+      <ellipse cx="12" cy="17" rx="9" ry="16" transform="rotate(144 12 17)"/><ellipse cx="-12" cy="17" rx="9" ry="16" transform="rotate(216 -12 17)"/>
+      <ellipse cx="-20" cy="-7" rx="9" ry="16" transform="rotate(288 -20 -7)"/><circle r="7" fill="#f09abd" stroke="#f09abd"/>
+      <path d="M0 27v54m0-29c13 0 22 7 28 17"/>
+    </g>
+    <g transform="translate(735 95) scale(.48)" stroke="#f09abd">
+      <ellipse cx="0" cy="-21" rx="9" ry="16"/><ellipse cx="20" cy="-7" rx="9" ry="16" transform="rotate(72 20 -7)"/>
+      <ellipse cx="12" cy="17" rx="9" ry="16" transform="rotate(144 12 17)"/><ellipse cx="-12" cy="17" rx="9" ry="16" transform="rotate(216 -12 17)"/>
+      <ellipse cx="-20" cy="-7" rx="9" ry="16" transform="rotate(288 -20 -7)"/><circle r="7" fill="#f2d27d" stroke="#f2d27d"/>
+      <path d="M0 27v48m0-24c10 1 17 6 22 13"/>
+    </g>
+    <g transform="translate(1370 475) scale(.54)" stroke="#f09abd">
+      <ellipse cx="0" cy="-21" rx="9" ry="16"/><ellipse cx="20" cy="-7" rx="9" ry="16" transform="rotate(72 20 -7)"/>
+      <ellipse cx="12" cy="17" rx="9" ry="16" transform="rotate(144 12 17)"/><ellipse cx="-12" cy="17" rx="9" ry="16" transform="rotate(216 -12 17)"/>
+      <ellipse cx="-20" cy="-7" rx="9" ry="16" transform="rotate(288 -20 -7)"/><circle r="7" fill="#b9a8f2" stroke="#b9a8f2"/>
+      <path d="M0 27v62m0-34c-11 1-18 7-23 15"/>
+    </g>
+    <!-- open book -->
+    <g transform="translate(1250 790) rotate(-8)" stroke="#b9a8f2">
+      <path d="M0 4c-30-20-65-22-99-9v91c34-13 69-11 99 9 30-20 65-22 99-9V-5C65-18 30-16 0 4Z" fill="#c7b7ed" fill-opacity=".10"/>
+      <path d="M0 4v91M-81 13c23-6 45-4 65 5m-65 15c23-6 45-4 65 5m97-25c-23-6-45-4-65 5m65 15c-23-6-45-4-65 5"/>
+      <path d="M-99-5v-12l18 8m180 4v-12L81-9" stroke="#f09abd"/>
+    </g>
+    <!-- two books on a shelf -->
+    <g transform="translate(96 545) rotate(7)" stroke="#f09abd">
+      <path d="M0 0h32v94H0z" fill="#f0afc2" fill-opacity=".10"/><path d="M7 14h18m-18 8h18M6 82h20"/>
+      <path d="M37 13h29v81H37z" fill="#f2d789" fill-opacity=".13"/><path d="M43 27h17m-17 8h17m-18 47h19" stroke="#e7c66e"/>
+      <path d="M-8 96h82" stroke="#b9a8f2"/>
+    </g>
+    <g transform="translate(1170 360) rotate(-9)" stroke="#f0c28a">
+      <path d="M0 22h76v24H0z" fill="#f0afc2" fill-opacity=".12"/><path d="M8 28h60M0 50h76v24H0z" fill="#c7b7ed" fill-opacity=".12"/><path d="M8 56h60" stroke="#b9a8f2"/>
+      <path d="M-6 77h88" stroke="#f09abd"/><path d="M12 5h57v15H12z" fill="#f2d789" fill-opacity=".14"/><path d="M20 12h40" stroke="#e7c66e"/>
+    </g>
+    <g transform="translate(430 895) scale(.45)" stroke="#b9a8f2">
+      <path d="M0 4c-30-20-65-22-99-9v91c34-13 69-11 99 9 30-20 65-22 99-9V-5C65-18 30-16 0 4Z" fill="#c7b7ed" fill-opacity=".10"/>
+      <path d="M0 4v91M-78 14c22-6 43-4 62 5m95-5c-22-6-43-4-62 5"/>
+    </g>
+    <!-- extra tiny flowers and books scattered lightly through the page -->
+    <g stroke-width="3">
+      <g transform="translate(330 105) scale(.38)" stroke="#f09abd">
+        <circle cy="-15" r="8"/><circle cx="15" r="8"/><circle cy="15" r="8"/><circle cx="-15" r="8"/><circle r="5" fill="#f2d27d" stroke="#f2d27d"/><path d="M0 24v38m0-17c-9 0-14 5-19 12"/>
+      </g>
+      <g transform="translate(970 95) scale(.32)" stroke="#b9a8f2">
+        <circle cy="-15" r="8"/><circle cx="15" r="8"/><circle cy="15" r="8"/><circle cx="-15" r="8"/><circle r="5" fill="#f2d27d" stroke="#f2d27d"/><path d="M0 24v34m0-15c8 0 13 4 18 10"/>
+      </g>
+      <g transform="translate(520 345) scale(.34)" stroke="#f0c28a">
+        <circle cy="-15" r="8"/><circle cx="15" r="8"/><circle cy="15" r="8"/><circle cx="-15" r="8"/><circle r="5" fill="#f09abd" stroke="#f09abd"/><path d="M0 24v38"/>
+      </g>
+      <g transform="translate(825 300) scale(.3)" stroke="#f09abd">
+        <circle cy="-15" r="8"/><circle cx="15" r="8"/><circle cy="15" r="8"/><circle cx="-15" r="8"/><circle r="5" fill="#f2d27d" stroke="#f2d27d"/><path d="M0 24v34"/>
+      </g>
+      <g transform="translate(410 660) scale(.35)" stroke="#b9a8f2">
+        <circle cy="-15" r="8"/><circle cx="15" r="8"/><circle cy="15" r="8"/><circle cx="-15" r="8"/><circle r="5" fill="#f2d27d" stroke="#f2d27d"/><path d="M0 24v38m0-17c-9 0-14 5-19 12"/>
+      </g>
+      <g transform="translate(900 835) scale(.34)" stroke="#f09abd">
+        <circle cy="-15" r="8"/><circle cx="15" r="8"/><circle cy="15" r="8"/><circle cx="-15" r="8"/><circle r="5" fill="#b9a8f2" stroke="#b9a8f2"/><path d="M0 24v38"/>
+      </g>
+      <g transform="translate(1100 555) scale(.3)" stroke="#f0c28a">
+        <path d="M0 0h42v55H0z" fill="#f2d789" fill-opacity=".14"/><path d="M8 12h26m-26 8h26M6 47h30" stroke="#e7c66e"/>
+        <path d="M47 8h39v47H47z" fill="#c7b7ed" fill-opacity=".12"/><path d="M55 19h23m-23 8h23M53 47h27" stroke="#b9a8f2"/>
+      </g>
+      <g transform="translate(280 430) rotate(-8) scale(.3)" stroke="#b9a8f2">
+        <path d="M0 5c-14-9-31-10-47-4v44c16-6 33-5 47 4 14-9 31-10 47-4V1C31-5 14-4 0 5Z" fill="#c7b7ed" fill-opacity=".12"/><path d="M0 5v44M-38 13c10-3 20-2 30 2m46-2c-10-3-20-2-30 2"/>
+      </g>
+      <g transform="translate(680 535) rotate(7) scale(.28)" stroke="#f09abd">
+        <path d="M0 0h35v58H0z" fill="#f0afc2" fill-opacity=".12"/><path d="M7 12h21m-21 8h21M6 50h23"/>
+        <path d="M40 9h34v49H40z" fill="#f2d789" fill-opacity=".13"/><path d="M47 21h20m-20 8h20M46 50h22" stroke="#e7c66e"/>
+      </g>
+      <g transform="translate(1040 235) rotate(-7) scale(.28)" stroke="#b9a8f2">
+        <path d="M0 5c-14-9-31-10-47-4v44c16-6 33-5 47 4 14-9 31-10 47-4V1C31-5 14-4 0 5Z" fill="#c7b7ed" fill-opacity=".12"/><path d="M0 5v44"/>
+      </g>
+      <g transform="translate(550 905) rotate(5) scale(.28)" stroke="#f0c28a">
+        <path d="M0 0h40v55H0z" fill="#f0afc2" fill-opacity=".12"/><path d="M8 12h24m-24 8h24M6 47h28"/>
+        <path d="M45 8h37v47H45z" fill="#c7b7ed" fill-opacity=".12"/><path d="M53 20h21m-21 8h21M51 47h25" stroke="#b9a8f2"/>
+      </g>
+      <g transform="translate(1320 650) scale(.3)" stroke="#f09abd">
+        <circle cy="-15" r="8"/><circle cx="15" r="8"/><circle cy="15" r="8"/><circle cx="-15" r="8"/><circle r="5" fill="#f2d27d" stroke="#f2d27d"/><path d="M0 24v34"/>
+      </g>
+      <g transform="translate(180 265) rotate(6) scale(.25)" stroke="#f0c28a">
+        <path d="M0 0h38v54H0z" fill="#f2d789" fill-opacity=".13"/><path d="M8 12h22m-22 8h22M6 47h26"/>
+      </g>
+    </g>
+    <!-- soft sparkles between the study doodles -->
+    <g stroke="#d3ad5a" stroke-width="4">
+      <path d="M380 240v28m-14-14h28M1010 170v22m-11-11h22M1045 650v26m-13-13h26"/>
+    </g>
+  </g>
+</svg>

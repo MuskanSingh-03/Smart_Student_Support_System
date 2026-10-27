@@ -9,13 +9,91 @@ import hashlib
 import os
 import json
 from datetime import datetime, date
-from flask import Flask, request, jsonify, g, send_from_directory
-from flask_cors import CORS
+from flask import Flask, request, jsonify, g, send_from_directory, session
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # Serve HTML files from the project root directory
 ROOT = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__, static_folder=ROOT, static_url_path='')
-CORS(app)  # keep as safety net
+app.config.update(
+    SECRET_KEY=os.environ.get('SMARTEDU_SECRET_KEY') or os.urandom(32),
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE='Lax',
+    SESSION_COOKIE_SECURE=os.environ.get('SMARTEDU_HTTPS', '').lower() == 'true',
+)
+# The UI and API are served from the same origin; do not expose credentialed CORS.
+
+@app.before_request
+def require_api_session():
+    if request.path.startswith('/api/') and request.path not in ('/api/login', '/api/register', '/api/health'):
+        if not session.get('user_id'):
+            return jsonify({'error': 'Authentication required'}), 401
+        # A student may only address their own personal data routes.
+        user_id = session.get('user_id')
+        role = session.get('role')
+        if (request.path == '/api/users' or request.path.startswith('/api/admin/')) and role != 'admin':
+            return jsonify({'error': 'Administrator role required'}), 403
+        student_actions = ('/api/assignments/submit', '/api/books/borrow', '/api/books/return',
+                           '/api/events/', '/api/groups/join', '/api/notes', '/api/chat')
+        if any(request.path == p or request.path.startswith(p) for p in student_actions):
+            if role not in ('student', 'admin'):
+                return jsonify({'error': 'Forbidden'}), 403
+        if role == 'student':
+            for key in ('student_id', 'user_id'):
+                value = request.args.get(key)
+                if value is not None and value != str(user_id):
+                    return jsonify({'error': 'Forbidden'}), 403
+        faculty_only = ('/api/attendance/at-risk', '/api/attendance/mark', '/api/grades/class-summary',
+                        '/api/faculty/', '/api/students')
+        if any(request.path == p or request.path.startswith(p) for p in faculty_only) and role not in ('faculty', 'admin'):
+            return jsonify({'error': 'Forbidden'}), 403
+        if role == 'student':
+            if request.path.startswith('/api/notes/') and request.method == 'DELETE':
+                note = query("SELECT student_id FROM quick_notes WHERE id=?", (request.path.rsplit('/', 1)[-1],), one=True)
+                if not note or note['student_id'] != user_id:
+                    return jsonify({'error': 'Forbidden'}), 403
+            if request.path == '/api/books/return':
+                payload = request.get_json(silent=True) or {}
+                txn = query("SELECT student_id FROM library_transactions WHERE id=?", (payload.get('transaction_id'),), one=True)
+                if not txn or txn['student_id'] != user_id:
+                    return jsonify({'error': 'Forbidden'}), 403
+            owned = (
+                request.path in (f'/api/dashboard/{user_id}', f'/api/grades/{user_id}',
+                                 f'/api/attendance/{user_id}', f'/api/attendance/log/{user_id}',
+                                 f'/api/library/my/{user_id}', f'/api/notes/{user_id}',
+                                 f'/api/chat/{user_id}')
+            )
+            if request.path.startswith(('/api/dashboard/', '/api/grades/', '/api/attendance/',
+                                        '/api/library/my/', '/api/chat/')) and not owned:
+                return jsonify({'error': 'Forbidden'}), 403
+            if request.path.startswith('/api/notes/') and request.method == 'GET' and not owned:
+                return jsonify({'error': 'Forbidden'}), 403
+            if request.method in ('POST', 'PUT', 'PATCH', 'DELETE') and request.path in (
+                '/api/attendance/mark', '/api/resources', '/api/notices', '/api/assignments/submit',
+                '/api/books/return', '/api/groups/join', '/api/notes'):
+                if request.path not in ('/api/assignments/submit', '/api/groups/join', '/api/notes'):
+                    return jsonify({'error': 'Forbidden'}), 403
+            if request.method in ('POST', 'PUT', 'PATCH', 'DELETE'):
+                payload = request.get_json(silent=True) or {}
+                for key in ('student_id', 'user_id'):
+                    if key in payload and str(payload[key]) != str(user_id):
+                        return jsonify({'error': 'Forbidden'}), 403
+        if role == 'faculty':
+            # Faculty dashboards use aggregate/assigned-class endpoints; direct student
+            # records are reserved for the student and administrators.
+            personal_prefixes = ('/api/dashboard/', '/api/library/my/', '/api/notes/', '/api/chat/')
+            if any(request.path.startswith(p) for p in personal_prefixes):
+                return jsonify({'error': 'Forbidden'}), 403
+            if request.path.startswith('/api/grades/') and request.path != '/api/grades/class-summary':
+                assigned = query("SELECT COUNT(*) AS n FROM subjects WHERE faculty_id=?", (user_id,), one=True)['n']
+                target = request.path.rsplit('/', 1)[-1]
+                if not assigned or not target.isdigit():
+                    return jsonify({'error': 'Forbidden'}), 403
+            if request.path.startswith('/api/attendance/') and request.path not in ('/api/attendance/at-risk', '/api/attendance/mark'):
+                assigned = query("SELECT COUNT(*) AS n FROM subjects WHERE faculty_id=?", (user_id,), one=True)['n']
+                target = request.path.rsplit('/', 1)[-1]
+                if not assigned or not target.isdigit():
+                    return jsonify({'error': 'Forbidden'}), 403
 
 DB_PATH = os.path.join(ROOT, 'smartedu.db')
 
@@ -58,7 +136,7 @@ def execute(sql, args=()):
     return cur.lastrowid
 
 def hash_pw(pw):
-    return hashlib.sha256(pw.encode()).hexdigest()
+    return generate_password_hash(pw)
 
 # ─────────────────────────────────────────
 #  DATABASE INIT & SEED
@@ -387,6 +465,10 @@ def init_db():
     if count == 0:
         conn.executescript(SEED_DATA)
         print("[OK] Database seeded with sample data!")
+    conn.execute(
+        "INSERT OR IGNORE INTO users (name,email,password,role,department) VALUES (?,?,?,?,?)",
+        ('SmartEdu Administrator', 'admin@college.edu', hash_pw('password123'), 'admin', 'Administration')
+    )
     conn.commit()
     conn.close()
 
@@ -479,15 +561,25 @@ def seed_attendance_and_grades():
 def login():
     data = request.get_json(silent=True) or {}
     identifier = data.get('identifier', '').strip()
-    password    = data.get('password', '').strip()
+    password    = data.get('password', '')
     if not identifier or not password:
         return jsonify({'error': 'Email/roll number and password required'}), 400
-    user = query(
-        "SELECT * FROM users WHERE (email=? OR roll_no=?) AND password=?",
-        (identifier, identifier, hash_pw(password)), one=True
-    )
+    user = query("SELECT * FROM users WHERE email=? OR roll_no=?", (identifier, identifier), one=True)
+    # Accept legacy SHA-256 values once, then replace them with Werkzeug's password hash.
+    if user:
+        stored = user['password']
+        legacy = len(stored) == 64 and all(c in '0123456789abcdef' for c in stored.lower())
+        valid = (hashlib.sha256(password.encode()).hexdigest() == stored) if legacy else check_password_hash(stored, password)
+        if not valid:
+            user = None
     if not user:
         return jsonify({'error': 'Invalid credentials'}), 401
+    if len(user['password']) == 64 and all(c in '0123456789abcdef' for c in user['password'].lower()):
+        execute("UPDATE users SET password=? WHERE id=?", (hash_pw(password), user['id']))
+        user['password'] = hash_pw(password)
+    session.clear()
+    session['user_id'] = user['id']
+    session['role'] = user['role']
     user.pop('password', None)
     return jsonify({'success': True, 'user': user})
 
@@ -518,6 +610,27 @@ def register():
 
 
 # ---------- STUDENTS ----------
+@app.route('/api/users', methods=['GET', 'POST'])
+def manage_users():
+    if request.method == 'GET':
+        return jsonify(query("SELECT id,name,email,roll_no,role,department,semester,section,phone FROM users ORDER BY role,name"))
+    data = request.get_json(silent=True) or {}
+    name = str(data.get('name', '')).strip()
+    email = str(data.get('email', '')).strip().lower()
+    password = str(data.get('password', ''))
+    role = data.get('role', 'student')
+    if not name or '@' not in email or len(password) < 8 or role not in ('student', 'faculty'):
+        return jsonify({'error': 'Enter a name, valid email, password of at least 8 characters, and student/faculty role'}), 400
+    try:
+        uid = execute(
+            "INSERT INTO users (name,email,roll_no,password,role,department,semester,section,phone) VALUES (?,?,?,?,?,?,?,?,?)",
+            (name,email,data.get('roll_no') or None,hash_pw(password),role,data.get('department'),data.get('semester'),data.get('section'),data.get('phone'))
+        )
+        return jsonify({'success': True, 'user_id': uid}), 201
+    except sqlite3.IntegrityError:
+        return jsonify({'error': 'Email or roll number already exists'}), 409
+
+
 @app.route('/api/students', methods=['GET'])
 def get_students():
     dept = request.args.get('department')
@@ -553,7 +666,11 @@ def get_subjects():
 # ---------- ATTENDANCE ----------
 @app.route('/api/attendance/<int:student_id>', methods=['GET'])
 def get_attendance(student_id):
-    rows = query("""
+    faculty_filter = " AND s.faculty_id=?" if session.get('role') == 'faculty' else ""
+    args = [student_id]
+    if faculty_filter:
+        args.append(session['user_id'])
+    rows = query(f"""
         SELECT s.code, s.name AS subject_name,
                COUNT(*) AS total,
                SUM(CASE WHEN a.status='present' THEN 1 ELSE 0 END) AS present,
@@ -562,77 +679,101 @@ def get_attendance(student_id):
                ROUND(100.0 * SUM(CASE WHEN a.status='present' THEN 1 ELSE 0 END) / COUNT(*), 1) AS percentage
         FROM attendance a
         JOIN subjects s ON a.subject_id = s.id
-        WHERE a.student_id=?
+        WHERE a.student_id=?{faculty_filter}
         GROUP BY a.subject_id
-    """, (student_id,))
+    """, args)
 
-    overall = query("""
+    overall_sql = """
         SELECT COUNT(*) AS total,
                SUM(CASE WHEN status='present' THEN 1 ELSE 0 END) AS present,
                ROUND(100.0 * SUM(CASE WHEN status='present' THEN 1 ELSE 0 END) / COUNT(*), 1) AS percentage
-        FROM attendance WHERE student_id=?
-    """, (student_id,), one=True)
+        FROM attendance a JOIN subjects s ON a.subject_id=s.id WHERE a.student_id=?
+    """ + (" AND s.faculty_id=?" if faculty_filter else "")
+    overall_args = [student_id] + ([session['user_id']] if faculty_filter else [])
+    overall = query(overall_sql, overall_args, one=True)
 
     return jsonify({'subjects': rows, 'overall': overall})
 
 
 @app.route('/api/attendance/log/<int:student_id>', methods=['GET'])
 def get_attendance_log(student_id):
-    rows = query("""
+    faculty_filter = " AND s.faculty_id=?" if session.get('role') == 'faculty' else ""
+    args = [student_id]
+    if faculty_filter:
+        args.append(session['user_id'])
+    rows = query(f"""
         SELECT a.date, a.status, s.name AS subject_name, s.code,
                u.name AS faculty_name
         FROM attendance a
         JOIN subjects s ON a.subject_id = s.id
         LEFT JOIN users u ON s.faculty_id = u.id
-        WHERE a.student_id=?
+        WHERE a.student_id=?{faculty_filter}
         ORDER BY a.date DESC
         LIMIT 50
-    """, (student_id,))
+    """, args)
     return jsonify(rows)
 
 
 @app.route('/api/attendance/mark', methods=['POST'])
 def mark_attendance():
-    data = request.get_json()
+    data = request.get_json(silent=True) or {}
     required = ['student_id', 'subject_id', 'date', 'status']
     if not all(data.get(f) for f in required):
         return jsonify({'error': 'student_id, subject_id, date, status required'}), 400
-    execute(
-        "INSERT OR REPLACE INTO attendance (student_id, subject_id, date, status) VALUES (?,?,?,?)",
-        (data['student_id'], data['subject_id'], data['date'], data['status'])
-    )
+    if data['status'] not in ('present', 'absent', 'late'):
+        return jsonify({'error': 'status must be present, absent, or late'}), 400
+    if session.get('role') == 'faculty':
+        subject = query("SELECT id FROM subjects WHERE id=? AND faculty_id=?", (data['subject_id'], session['user_id']), one=True)
+        if not subject:
+            return jsonify({'error': 'You may only mark attendance for your subjects'}), 403
+    student = query("SELECT id FROM users WHERE id=? AND role='student'", (data['student_id'],), one=True)
+    if not student:
+        return jsonify({'error': 'Student not found'}), 404
+    existing = query("SELECT id FROM attendance WHERE student_id=? AND subject_id=? AND date=? ORDER BY id LIMIT 1",
+                     (data['student_id'], data['subject_id'], data['date']), one=True)
+    if existing:
+        execute("UPDATE attendance SET status=? WHERE id=?", (data['status'], existing['id']))
+    else:
+        execute("INSERT INTO attendance (student_id, subject_id, date, status) VALUES (?,?,?,?)",
+                (data['student_id'], data['subject_id'], data['date'], data['status']))
     return jsonify({'success': True})
 
 
 @app.route('/api/attendance/at-risk', methods=['GET'])
 def at_risk_students():
     """Students with any subject below 75% attendance."""
-    rows = query("""
+    faculty_filter = " AND s.faculty_id=?" if session.get('role') == 'faculty' else ""
+    args = (session['user_id'],) if faculty_filter else ()
+    rows = query(f"""
         SELECT u.id, u.name, u.roll_no, u.email, s.name AS subject_name,
                ROUND(100.0 * SUM(CASE WHEN a.status='present' THEN 1 ELSE 0 END) / COUNT(*), 1) AS percentage
         FROM attendance a
         JOIN users u ON a.student_id = u.id
         JOIN subjects s ON a.subject_id = s.id
-        WHERE u.role='student'
+        WHERE u.role='student'{faculty_filter}
         GROUP BY a.student_id, a.subject_id
         HAVING percentage < 75
         ORDER BY percentage ASC
-    """)
+    """, args)
     return jsonify(rows)
 
 
 # ---------- GRADES ----------
 @app.route('/api/grades/<int:student_id>', methods=['GET'])
 def get_grades(student_id):
-    rows = query("""
+    faculty_filter = " AND s.faculty_id=?" if session.get('role') == 'faculty' else ""
+    args = [student_id]
+    if faculty_filter:
+        args.append(session['user_id'])
+    rows = query(f"""
         SELECT g.exam_type, g.marks, g.max_marks, g.semester,
                s.name AS subject_name, s.code,
                ROUND(100.0 * g.marks / g.max_marks, 1) AS percentage
         FROM grades g
         JOIN subjects s ON g.subject_id = s.id
-        WHERE g.student_id=?
+        WHERE g.student_id=?{faculty_filter}
         ORDER BY g.semester, s.name
-    """, (student_id,))
+    """, args)
     return jsonify(rows)
 
 
@@ -881,6 +1022,11 @@ def get_stats():
 def health():
     return jsonify({'status': 'ok', 'db': DB_PATH, 'time': datetime.now().isoformat()})
 
+@app.route('/api/logout', methods=['POST'])
+def logout():
+    session.clear()
+    return jsonify({'success': True})
+
 
 # ---------- BOOKS / LIBRARY ----------
 @app.route('/api/books', methods=['GET'])
@@ -1056,4 +1202,4 @@ if __name__ == '__main__':
     print("  GET  /api/attendance/at-risk")
     print("  GET  /api/stats")
     print("=" * 50)
-    app.run(debug=True, port=5000, host='0.0.0.0')
+    app.run(debug=os.environ.get('SMARTEDU_DEBUG', '').lower() == 'true', port=5000, host='127.0.0.1')

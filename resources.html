@@ -11,7 +11,7 @@
 <body>
   <nav class="navbar scrolled" id="navbar">
     <div class="nav-container">
-      <a class="nav-brand" href="index.html"><div class="brand-icon"><i class="fas fa-graduation-cap"></i></div><span class="brand-name">SmartEdu</span></a>
+      <a class="nav-brand" href="index.html"><div class="brand-icon"><i class="fas fa-book-open"></i></div><span class="brand-name">SmartEdu</span></a>
       <ul class="nav-links" id="navLinks">
         <li><a href="index.html" class="nav-link">Home</a></li>
         <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
@@ -128,7 +128,7 @@
           <div class="res-meta"><span><i class="fas fa-book"></i> DSA</span><span><i class="fas fa-user"></i> Prof. Ramesh</span><span>2.4 MB</span></div>
           <div style="font-size:0.78rem;color:var(--text-dim);">Downloaded 342 times</div>
           <div style="display:flex;gap:8px;">
-            <button class="res-download-btn" onclick="showToast('Downloading Trees & Graphs PDF...','info')"><i class="fas fa-download"></i> Download</button>
+            <button class="res-download-btn" onclick="downloadStudyPdf(this)"><i class="fas fa-download"></i> Download PDF</button>
             <button onclick="this.style.color='#f59e0b';showToast('Bookmarked!','success')" style="background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:8px;padding:8px;cursor:pointer;color:var(--text-muted);transition:var(--transition);"><i class="fas fa-bookmark"></i></button>
           </div>
         </div>
@@ -139,7 +139,7 @@
           <div class="res-meta"><span><i class="fas fa-book"></i> DBMS</span><span><i class="fas fa-user"></i> Prof. Anita</span><span>1.8 MB</span></div>
           <div style="font-size:0.78rem;color:var(--text-dim);">Downloaded 578 times</div>
           <div style="display:flex;gap:8px;">
-            <button class="res-download-btn" onclick="showToast('Downloading DBMS Normalization PDF...','info')"><i class="fas fa-download"></i> Download</button>
+            <button class="res-download-btn" onclick="downloadStudyPdf(this)"><i class="fas fa-download"></i> Download PDF</button>
             <button onclick="this.style.color='#f59e0b';showToast('Bookmarked!','success')" style="background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:8px;padding:8px;cursor:pointer;color:var(--text-muted);"><i class="fas fa-bookmark"></i></button>
           </div>
         </div>
@@ -161,7 +161,7 @@
           <div class="res-meta"><span><i class="fas fa-book"></i> CN</span><span><i class="fas fa-user"></i> Prof. Suresh</span><span>3.1 MB</span></div>
           <div style="font-size:0.78rem;color:var(--text-dim);">Downloaded 415 times</div>
           <div style="display:flex;gap:8px;">
-            <button class="res-download-btn" onclick="showToast('Downloading CN Notes...','info')"><i class="fas fa-download"></i> Download</button>
+            <button class="res-download-btn" onclick="downloadStudyPdf(this)"><i class="fas fa-download"></i> Download PDF</button>
             <button onclick="this.style.color='#f59e0b';showToast('Bookmarked!','success')" style="background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:8px;padding:8px;cursor:pointer;color:var(--text-muted);"><i class="fas fa-bookmark"></i></button>
           </div>
         </div>
@@ -172,7 +172,7 @@
           <div class="res-meta"><span><i class="fas fa-book"></i> OS</span><span><i class="fas fa-user"></i> Prof. Preethi</span><span>2.2 MB</span></div>
           <div style="font-size:0.78rem;color:var(--text-dim);">Downloaded 290 times</div>
           <div style="display:flex;gap:8px;">
-            <button class="res-download-btn" onclick="showToast('Downloading OS Notes...','info')"><i class="fas fa-download"></i> Download</button>
+            <button class="res-download-btn" onclick="downloadStudyPdf(this)"><i class="fas fa-download"></i> Download PDF</button>
             <button onclick="this.style.color='#f59e0b';showToast('Bookmarked!','success')" style="background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:8px;padding:8px;cursor:pointer;color:var(--text-muted);"><i class="fas fa-bookmark"></i></button>
           </div>
         </div>
@@ -183,7 +183,7 @@
           <div class="res-meta"><span><i class="fas fa-book"></i> DBMS</span><span><i class="fas fa-calendar"></i> 2021–25</span><span>5 papers</span></div>
           <div style="font-size:0.78rem;color:var(--text-dim);">Downloaded 1,204 times</div>
           <div style="display:flex;gap:8px;">
-            <button class="res-download-btn" onclick="showToast('Downloading all past papers...','info')"><i class="fas fa-download"></i> Download All</button>
+            <button class="res-download-btn" onclick="downloadStudyPdf(this)"><i class="fas fa-download"></i> Download PDF</button>
             <button onclick="this.style.color='#f59e0b';showToast('Bookmarked!','success')" style="background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:8px;padding:8px;cursor:pointer;color:var(--text-muted);"><i class="fas fa-bookmark"></i></button>
           </div>
         </div>
@@ -194,7 +194,7 @@
           <div class="res-meta"><span><i class="fas fa-book"></i> SE</span><span><i class="fas fa-user"></i> Prof. Vikram</span><span>1.5 MB</span></div>
           <div style="font-size:0.78rem;color:var(--text-dim);">Downloaded 188 times</div>
           <div style="display:flex;gap:8px;">
-            <button class="res-download-btn" onclick="showToast('Downloading SE Notes...','info')"><i class="fas fa-download"></i> Download</button>
+            <button class="res-download-btn" onclick="downloadStudyPdf(this)"><i class="fas fa-download"></i> Download PDF</button>
             <button onclick="this.style.color='#f59e0b';showToast('Bookmarked!','success')" style="background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:8px;padding:8px;cursor:pointer;color:var(--text-muted);"><i class="fas fa-bookmark"></i></button>
           </div>
         </div>
@@ -216,7 +216,7 @@
           <div class="res-meta"><span><i class="fas fa-book"></i> OS Lab</span><span><i class="fas fa-user"></i> Prof. Preethi</span><span>4.2 MB</span></div>
           <div style="font-size:0.78rem;color:var(--text-dim);">Downloaded 340 times</div>
           <div style="display:flex;gap:8px;">
-            <button class="res-download-btn" onclick="showToast('Downloading Lab Manual...','info')"><i class="fas fa-download"></i> Download</button>
+            <button class="res-download-btn" onclick="downloadStudyPdf(this)"><i class="fas fa-download"></i> Download PDF</button>
             <button onclick="this.style.color='#f59e0b';showToast('Bookmarked!','success')" style="background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:8px;padding:8px;cursor:pointer;color:var(--text-muted);"><i class="fas fa-bookmark"></i></button>
           </div>
         </div>
@@ -227,7 +227,7 @@
           <div class="res-meta"><span><i class="fas fa-book"></i> DSA</span><span><i class="fas fa-calendar"></i> 2020–25</span><span>6 papers</span></div>
           <div style="font-size:0.78rem;color:var(--text-dim);">Downloaded 987 times</div>
           <div style="display:flex;gap:8px;">
-            <button class="res-download-btn" onclick="showToast('Downloading DSA papers...','info')"><i class="fas fa-download"></i> Download All</button>
+            <button class="res-download-btn" onclick="downloadStudyPdf(this)"><i class="fas fa-download"></i> Download PDF</button>
             <button onclick="this.style.color='#f59e0b';showToast('Bookmarked!','success')" style="background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:8px;padding:8px;cursor:pointer;color:var(--text-muted);"><i class="fas fa-bookmark"></i></button>
           </div>
         </div>
@@ -249,7 +249,7 @@
           <div class="res-meta"><span><i class="fas fa-book"></i> DBMS</span><span><i class="fas fa-user"></i> Prof. Anita</span><span>2.6 MB</span></div>
           <div style="font-size:0.78rem;color:var(--text-dim);">Downloaded 621 times</div>
           <div style="display:flex;gap:8px;">
-            <button class="res-download-btn" onclick="showToast('Downloading SQL Notes...','info')"><i class="fas fa-download"></i> Download</button>
+            <button class="res-download-btn" onclick="downloadStudyPdf(this)"><i class="fas fa-download"></i> Download PDF</button>
             <button onclick="this.style.color='#f59e0b';showToast('Bookmarked!','success')" style="background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:8px;padding:8px;cursor:pointer;color:var(--text-muted);"><i class="fas fa-bookmark"></i></button>
           </div>
         </div>
@@ -258,8 +258,16 @@
     </main>
   </div>
 
+  <script src="js/api.js"></script>
   <script src="js/main.js"></script>
   <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const grid = document.getElementById('resourceGrid');
+      if (grid) grid.innerHTML = '<p style="color:var(--text-muted);">Loading resources...</p>';
+      const result = await Resources.getAll();
+      if (result.ok) renderResources(result.data, 'resourceGrid');
+      else if (grid) grid.innerHTML = '<p style="color:var(--danger);">Could not load resources. Please refresh and try again.</p>';
+    });
     function filterRes(type, subject, btn) {
       document.querySelectorAll('.resource-card').forEach(c => {
         const typeMatch = !type || c.dataset.type === type;

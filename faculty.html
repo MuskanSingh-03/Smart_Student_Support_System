@@ -11,7 +11,7 @@
 <body>
   <nav class="navbar scrolled" id="navbar">
     <div class="nav-container">
-      <a class="nav-brand" href="index.html"><div class="brand-icon"><i class="fas fa-graduation-cap"></i></div><span class="brand-name">SmartEdu</span></a>
+      <a class="nav-brand" href="index.html"><div class="brand-icon"><i class="fas fa-book-open"></i></div><span class="brand-name">SmartEdu</span></a>
       <ul class="nav-links" id="navLinks">
         <li><a href="index.html" class="nav-link">Home</a></li>
         <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
@@ -34,9 +34,9 @@
         <div class="sidebar-label">Faculty Portal</div>
         <a href="faculty.html" class="sidebar-link active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
         <a href="#" class="sidebar-link"><i class="fas fa-users"></i> My Students</a>
-        <a href="#" class="sidebar-link" onclick="showToast('Attendance marked!','success')"><i class="fas fa-calendar-alt"></i> Mark Attendance</a>
-        <a href="#" class="sidebar-link" onclick="showToast('Upload dialog opened','info')"><i class="fas fa-upload"></i> Upload Resources</a>
-        <a href="#" class="sidebar-link"><i class="fas fa-bullhorn"></i> Post Notice</a>
+        <a href="#markAttendance" class="sidebar-link"><i class="fas fa-calendar-alt"></i> Mark Attendance</a>
+        <a href="resources.html" class="sidebar-link"><i class="fas fa-upload"></i> View Resources</a>
+        <a href="#postNotice" class="sidebar-link"><i class="fas fa-bullhorn"></i> Post Notice</a>
         <a href="#" class="sidebar-link"><i class="fas fa-edit"></i> Grade Assignments</a>
       </div>
       <div class="sidebar-section">
@@ -59,8 +59,8 @@
           <p>Welcome, Prof. Anita Desai — Database Management System & Data Warehousing</p>
         </div>
         <div style="display:flex;gap:10px;">
-          <button class="btn-ghost" onclick="showToast('Report exported!','success')"><i class="fas fa-file-export"></i> Export Report</button>
-          <button class="btn-primary" onclick="showToast('Notice posted successfully!','success')"><i class="fas fa-bullhorn"></i> Post Notice</button>
+          <button class="btn-ghost" onclick="downloadPageReport('Faculty Performance Report')"><i class="fas fa-file-export"></i> Export Report</button>
+          <button class="btn-primary" onclick="document.getElementById('postNotice').scrollIntoView({behavior:'smooth'})"><i class="fas fa-bullhorn"></i> Post Notice</button>
         </div>
       </div>
 
@@ -104,7 +104,7 @@
             <h3 style="font-size:1rem;font-weight:700;"><i class="fas fa-exclamation-triangle" style="color:var(--warning);margin-right:8px;"></i>At-Risk Students</h3>
             <button class="btn-ghost" style="padding:6px 12px;font-size:0.8rem;" onclick="showToast('Alerts sent to 7 students','warning')"><i class="fas fa-paper-plane"></i> Send All Alerts</button>
           </div>
-          <div style="display:flex;flex-direction:column;gap:10px;">
+          <div id="atRiskRoster" style="display:flex;flex-direction:column;gap:10px;">
             <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:10px;">
               <div style="width:38px;height:38px;background:linear-gradient(135deg,#ef4444,#f97316);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0;font-size:0.9rem;">A</div>
               <div style="flex:1;"><div style="font-size:0.9rem;font-weight:600;">Arjun Mehta</div><div style="font-size:0.78rem;color:var(--text-muted);">Attendance: 68% | CGPA: 6.2</div></div>
@@ -159,20 +159,31 @@
         </div>
       </div>
 
+      <section class="card mb-6" id="markAttendance">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:14px;"><i class="fas fa-calendar-check" style="color:var(--primary);"></i> Record Class Attendance</h3>
+        <form id="facultyAttendanceForm" class="form-row">
+          <div class="form-group"><label class="form-label" for="facultyAttendanceStudent">Student</label><select id="facultyAttendanceStudent" class="form-control" required></select></div>
+          <div class="form-group"><label class="form-label" for="facultyAttendanceSubject">Your subject</label><select id="facultyAttendanceSubject" class="form-control" required></select></div>
+          <div class="form-group"><label class="form-label" for="facultyAttendanceDate">Date</label><input id="facultyAttendanceDate" class="form-control" type="date" required /></div>
+          <div class="form-group"><label class="form-label" for="facultyAttendanceStatus">Status</label><select id="facultyAttendanceStatus" class="form-control"><option value="present">Present</option><option value="absent">Absent</option><option value="late">Late</option></select></div>
+          <div><button class="btn-primary" type="submit">Save attendance</button></div>
+        </form>
+      </section>
+
       <!-- STUDENT ROSTER -->
       <div class="card mb-6 fade-in">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
           <h3 style="font-size:1rem;font-weight:700;">Student Roster</h3>
           <div style="display:flex;gap:10px;">
-            <div class="search-bar" style="padding:8px 14px;"><i class="fas fa-search"></i><input type="text" placeholder="Search student..." style="font-size:0.85rem;" /></div>
-            <button class="btn-ghost" style="padding:8px 14px;font-size:0.82rem;" onclick="showToast('Roster exported!','success')"><i class="fas fa-download"></i> Export</button>
+            <div class="search-bar" style="padding:8px 14px;"><i class="fas fa-search"></i><input type="text" id="rosterSearch" oninput="filterFacultyRoster(this.value)" placeholder="Search student..." style="font-size:0.85rem;" /></div>
+            <button class="btn-ghost" style="padding:8px 14px;font-size:0.82rem;" onclick="downloadPageReport('Student Roster',document.querySelector('#studentRoster'))"><i class="fas fa-download"></i> Export</button>
           </div>
         </div>
-        <table class="data-table">
+        <table class="data-table" id="studentRoster">
           <thead>
             <tr><th>Student</th><th>Roll No.</th><th>CGPA</th><th>DBMS Attendance</th><th>Internal Marks</th><th>Status</th><th>Action</th></tr>
           </thead>
-          <tbody>
+          <tbody id="facultyRosterBody">
             <tr>
               <td><div style="font-weight:600;font-size:0.9rem;">Ananya Roy</div></td>
               <td style="color:var(--text-dim);">21CS023</td>
@@ -232,48 +243,110 @@
       </div>
 
       <!-- POST ANNOUNCEMENT -->
-      <div class="card fade-in">
+      <div class="card fade-in" id="postNotice">
         <h3 style="font-size:1rem;font-weight:700;margin-bottom:20px;"><i class="fas fa-bullhorn" style="color:var(--primary);margin-right:8px;"></i>Post Announcement</h3>
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">Notice Title</label>
-            <input class="form-control" type="text" placeholder="e.g., DBMS Mid-Sem Syllabus Update" />
+            <input class="form-control" id="facultyNoticeTitle" type="text" placeholder="e.g., DBMS Mid-Sem Syllabus Update" required />
           </div>
           <div class="form-group">
             <label class="form-label">Category</label>
-            <select class="form-control">
+            <select class="form-control" id="facultyNoticeCategory">
               <option>General</option><option>Exam</option><option>Assignment</option><option>Urgent</option><option>Resource</option>
             </select>
           </div>
         </div>
         <div class="form-group">
           <label class="form-label">Message</label>
-          <textarea class="form-control" rows="4" placeholder="Write your announcement here..."></textarea>
+          <textarea class="form-control" id="facultyNoticeMessage" rows="4" placeholder="Write your announcement here..." required></textarea>
         </div>
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">Target Audience</label>
-            <select class="form-control">
+            <select class="form-control" id="facultyNoticeTarget">
               <option>All Students (Sem 5)</option><option>Section A Only</option><option>Section B Only</option><option>Specific Students</option>
             </select>
           </div>
           <div class="form-group">
             <label class="form-label">Priority</label>
-            <select class="form-control">
+            <select class="form-control" id="facultyNoticePriority">
               <option>Normal</option><option>High</option><option>Urgent</option>
             </select>
           </div>
         </div>
         <div style="display:flex;gap:12px;">
-          <button class="btn-primary" onclick="showToast('Notice posted successfully!','success')"><i class="fas fa-bullhorn"></i> Post Notice</button>
-          <button class="btn-ghost" onclick="showToast('Draft saved!','info')"><i class="fas fa-save"></i> Save Draft</button>
+          <button class="btn-primary" type="button" onclick="postFacultyNotice()"><i class="fas fa-bullhorn"></i> Post Notice</button>
+          <button class="btn-ghost" type="button" onclick="saveFacultyNoticeDraft()"><i class="fas fa-save"></i> Save Draft</button>
         </div>
       </div>
 
     </main>
   </div>
 
+  <script src="js/api.js"></script>
   <script src="js/main.js"></script>
+  <script>
+    const facultyEsc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    async function loadFacultyPortal() {
+      const user = getCurrentUser();
+      if (!user) return;
+      const [dashboard, students, subjects, risk, gradeSummary] = await Promise.all([
+        Faculty.getDashboard(user.id), apiCall('/students'), apiCall('/subjects'), Attendance.getAtRisk(), Grades.getClassSummary()
+      ]);
+      if (dashboard.ok) {
+        const statValues = document.querySelectorAll('.stats-row .stat-card-val');
+        if (statValues[0]) statValues[0].textContent = dashboard.data.total_students;
+        if (statValues[1]) statValues[1].textContent = Number(dashboard.data.avg_cgpa || 0).toFixed(1);
+        if (statValues[3]) statValues[3].textContent = `${dashboard.data.class_attendance || 0}%`;
+      }
+      if (students.ok) {
+        const roster = document.getElementById('facultyRosterBody');
+        const attendanceSelect = document.getElementById('facultyAttendanceStudent');
+        attendanceSelect.innerHTML = students.data.map(s => `<option value="${s.id}">${facultyEsc(s.name)} (${facultyEsc(s.roll_no)})</option>`).join('');
+        const rows = await Promise.all(students.data.map(async s => {
+          const [attendance, grades] = await Promise.all([Attendance.getByStudent(s.id), Grades.getByStudent(s.id)]);
+          const subjectsForFaculty = attendance.ok ? attendance.data.subjects : [];
+          const att = subjectsForFaculty.length ? subjectsForFaculty.reduce((n,x)=>n+Number(x.present||0),0) / subjectsForFaculty.reduce((n,x)=>n+Number(x.total||0),0) * 100 : null;
+          const myGrades = grades.ok ? grades.data : [];
+          const avg = myGrades.length ? myGrades.reduce((n,x)=>n+Number(x.percentage||0),0)/myGrades.length/10 : null;
+          const status = att === null ? 'No class data' : att < 75 ? 'At risk' : 'On track';
+          return `<tr data-name="${facultyEsc((s.name+' '+s.roll_no).toLowerCase())}"><td><div style="font-weight:600">${facultyEsc(s.name)}</div></td><td>${facultyEsc(s.roll_no||'-')}</td><td>${avg===null?'-':avg.toFixed(1)}</td><td>${att===null?'-':att.toFixed(1)+'%'}</td><td>${myGrades.length?myGrades[0].marks+'/'+myGrades[0].max_marks:'-'}</td><td><span class="badge ${att!==null&&att<75?'badge-warning':'badge-success'}">${status}</span></td><td><button type="button" onclick="downloadStudentReport(${s.id})" aria-label="Download student report" style="background:none;border:0;color:var(--primary);cursor:pointer"><i class="fas fa-file-download"></i></button></td></tr>`;
+        }));
+        roster.innerHTML = rows.join('');
+      } else showToast(students.error, 'error');
+      if (subjects.ok) {
+        const mySubjects = subjects.data.filter(s => Number(s.faculty_id) === Number(user.id));
+        document.getElementById('facultyAttendanceSubject').innerHTML = mySubjects.map(s=>`<option value="${s.id}">${facultyEsc(s.code)} - ${facultyEsc(s.name)}</option>`).join('');
+      }
+      if (risk.ok) {
+        const container = document.getElementById('atRiskRoster');
+        container.innerHTML = risk.data.length ? risk.data.map(s=>`<div class="alert-banner alert-warning" style="margin:0"><i class="fas fa-exclamation-triangle"></i><div><strong>${facultyEsc(s.name)}</strong> (${facultyEsc(s.roll_no)}) - ${facultyEsc(s.subject_name)}: ${s.percentage}% attendance</div></div>`).join('') : '<p style="color:var(--text-muted)">No students are below the attendance threshold in your classes.</p>';
+      }
+      if (gradeSummary.ok && gradeSummary.data.total_students) {
+        const d = gradeSummary.data;
+        const distribution = document.querySelectorAll('.grid-2 .progress-bar .progress-fill');
+        const keys = ['outstanding','excellent','very_good','good','average'];
+        keys.forEach((key,i)=>{ const val=Number(d[key]||0); const total=Number(d.total_students||1); if(distribution[i]) distribution[i].style.width=`${Math.min(100,val/total*100)}%`; });
+      }
+      document.getElementById('facultyAttendanceDate').value = new Date().toISOString().slice(0,10);
+      const draft = localStorage.getItem('facultyNoticeDraft');
+      if (draft) { try { const d=JSON.parse(draft); document.getElementById('facultyNoticeTitle').value=d.title||''; document.getElementById('facultyNoticeMessage').value=d.message||''; } catch (_) {} }
+    }
+    async function postFacultyNotice() {
+      const user=getCurrentUser();
+      const categoryMap={General:'info',Exam:'exam',Assignment:'assignment',Urgent:'urgent',Resource:'resource'};
+      const priority=document.getElementById('facultyNoticePriority').value.toLowerCase();
+      const result=await Notices.post({title:document.getElementById('facultyNoticeTitle').value.trim(),description:document.getElementById('facultyNoticeMessage').value.trim(),category:categoryMap[document.getElementById('facultyNoticeCategory').value]||'info',priority:priority==='urgent'?'high':priority,posted_by:user.id,target_dept:'all'});
+      showToast(result.ok?'Notice published for students.':result.error,result.ok?'success':'error');
+      if(result.ok){document.getElementById('facultyNoticeTitle').value='';document.getElementById('facultyNoticeMessage').value='';localStorage.removeItem('facultyNoticeDraft');}
+    }
+    function saveFacultyNoticeDraft(){ localStorage.setItem('facultyNoticeDraft',JSON.stringify({title:document.getElementById('facultyNoticeTitle').value,message:document.getElementById('facultyNoticeMessage').value}));showToast('Draft saved on this device.','success'); }
+    async function filterFacultyRoster(value){document.querySelectorAll('#facultyRosterBody tr').forEach(row=>row.hidden=!row.dataset.name.includes(value.toLowerCase()));}
+    async function downloadStudentReport(studentId){const row=[...document.querySelectorAll('#facultyRosterBody tr')].find(tr=>tr.querySelector('button[onclick^="downloadStudentReport"]')?.getAttribute('onclick')===`downloadStudentReport(${studentId})`);const name=row?.querySelector('td')?.textContent.trim()||'Student';const [a,g]=await Promise.all([Attendance.getByStudent(studentId),Grades.getByStudent(studentId)]);const lines=[`Student: ${name}`,...(a.ok?a.data.subjects.map(s=>`${s.subject_name}: ${s.present}/${s.total} present (${s.percentage}%)`):[]),...(g.ok?g.data.map(x=>`${x.subject_name}: ${x.marks}/${x.max_marks} (${x.percentage}%)`):[])];const pdf=makeStudyPdf(`${name} Academic Report`,lines);const url=URL.createObjectURL(new Blob([pdf],{type:'application/pdf'}));const link=document.createElement('a');link.href=url;link.download=`${name.replace(/[^a-z0-9]+/gi,'_')}_report.pdf`;document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);}
+    document.getElementById('facultyAttendanceForm').addEventListener('submit',async e=>{e.preventDefault();const result=await Attendance.mark({student_id:Number(document.getElementById('facultyAttendanceStudent').value),subject_id:Number(document.getElementById('facultyAttendanceSubject').value),date:document.getElementById('facultyAttendanceDate').value,status:document.getElementById('facultyAttendanceStatus').value});showToast(result.ok?'Attendance saved.':result.error,result.ok?'success':'error');if(result.ok)loadFacultyPortal();});
+    document.addEventListener('DOMContentLoaded',loadFacultyPortal);
+  </script>
 </body>
 </html>
 

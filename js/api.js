@@ -21,6 +21,10 @@ function clearCurrentUser() {
   sessionStorage.removeItem('smartedu_user');
 }
 
+function escapeApiText(value) {
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[ch]);
+}
+
 // Generic fetch wrapper
 async function apiCall(endpoint, options = {}) {
   try {
@@ -30,6 +34,11 @@ async function apiCall(endpoint, options = {}) {
     });
     const contentType = res.headers.get('content-type') || '';
     const data = contentType.includes('application/json') ? await res.json() : {};
+    if (res.status === 401 && !endpoint.startsWith('/login')) {
+      sessionStorage.removeItem('smartedu_user');
+      window.location.href = 'login.html';
+      throw new Error(data.error || 'Your session expired. Please sign in again.');
+    }
     if (!res.ok) throw new Error(data.error || 'API error');
     return { ok: true, data };
   } catch (err) {
@@ -52,7 +61,8 @@ const Auth = {
     return apiCall('/register', { method: 'POST', body: JSON.stringify(data) });
   },
 
-  logout() {
+  async logout() {
+    try { await fetch(`${API_BASE}/logout`, { method: 'POST', credentials: 'same-origin' }); } catch (_) {}
     clearCurrentUser();
     window.location.href = 'login.html';
   }
@@ -156,6 +166,11 @@ const Stats = {
   }
 };
 
+const Admin = {
+  async getUsers() { return apiCall('/users'); },
+  async createUser(data) { return apiCall('/users', { method: 'POST', body: JSON.stringify(data) }); }
+};
+
 // ─── UI HELPERS ─────────────────────────────────────────────────────
 
 /** Show a loading spinner inside a container */
@@ -205,20 +220,20 @@ function renderNotices(notices, containerId) {
   const badgeCls = { urgent: 'nb-urgent', exam: 'nb-exam', event: 'nb-event', info: 'nb-info', finance: 'nb-info' };
 
   el.innerHTML = notices.map(n => `
-    <div class="notice-card" data-type="${n.category}" data-searchable>
+      <div class="notice-card" data-type="${escapeApiText(n.category)}" data-searchable>
       <div class="notice-icon ${niCls[n.category] || 'ni-blue'}">
         <i class="fas ${icons[n.category] || 'fa-bell'}"></i>
       </div>
       <div class="notice-content">
-        <div class="notice-title">${n.title}</div>
-        <div class="notice-desc">${n.description}</div>
+        <div class="notice-title">${escapeApiText(n.title)}</div>
+        <div class="notice-desc">${escapeApiText(n.description)}</div>
         <div class="notice-meta">
-          <span><i class="fas fa-user"></i> ${n.posted_by_name || 'Admin'}</span>
+          <span><i class="fas fa-user"></i> ${escapeApiText(n.posted_by_name || 'Admin')}</span>
           <span><i class="fas fa-clock"></i> ${timeAgo(n.created_at)}</span>
           <span><i class="fas fa-eye"></i> ${n.views} views</span>
         </div>
       </div>
-      <span class="notice-badge ${badgeCls[n.category] || 'nb-info'}">${n.category}</span>
+      <span class="notice-badge ${badgeCls[n.category] || 'nb-info'}">${escapeApiText(n.category)}</span>
     </div>`).join('');
 }
 
@@ -232,17 +247,17 @@ function renderResources(resources, containerId) {
   el.innerHTML = resources.map(r => {
     const [cls, icon] = (iconMap[r.file_type] || 'ri-doc fa-file').split(' ');
     return `
-      <div class="resource-card" data-subject="${r.subject_name}" data-type="${r.file_type}" data-searchable>
+      <div class="resource-card" data-resource-id="${r.id}" data-subject="${escapeApiText(r.code || r.subject_name)}" data-type="${escapeApiText(r.file_type)}" data-searchable>
         <div class="res-icon ${cls}"><i class="fas ${icon}"></i></div>
-        <div class="res-name">${r.title}</div>
+        <div class="res-name">${escapeApiText(r.title)}</div>
         <div class="res-meta">
-          <span><i class="fas fa-book"></i> ${r.code || r.subject_name || '—'}</span>
-          <span><i class="fas fa-user"></i> ${r.faculty_name || '—'}</span>
+          <span><i class="fas fa-book"></i> ${escapeApiText(r.code || r.subject_name || '—')}</span>
+          <span><i class="fas fa-user"></i> ${escapeApiText(r.faculty_name || '—')}</span>
           <span>${r.file_size || '—'}</span>
         </div>
         <div style="font-size:0.78rem;color:var(--text-dim);">Downloaded ${r.downloads} times</div>
         <div style="display:flex;gap:8px;">
-          <button class="res-download-btn" onclick="handleDownload(${r.id}, '${r.title}')">
+          <button class="res-download-btn" onclick="downloadStudyPdf(this)">
             <i class="fas fa-${r.file_type === 'video' ? 'play' : 'download'}"></i>
             ${r.file_type === 'video' ? 'Watch Now' : 'Download'}
           </button>
@@ -256,8 +271,9 @@ function renderResources(resources, containerId) {
 }
 
 async function handleDownload(id, title) {
-  await Resources.download(id);
-  showToast(`Downloading: ${title}`, 'info');
+  const result = await Resources.download(id);
+  if (result.ok) showToast(`Downloaded: ${title}`, 'success');
+  else showToast(result.error || 'Download failed.', 'error');
 }
 
 /** Time-ago helper */
@@ -301,6 +317,7 @@ window.Stats = Stats;
 window.renderAttendanceSubjects = renderAttendanceSubjects;
 window.renderNotices = renderNotices;
 window.renderResources = renderResources;
+window.escapeApiText = escapeApiText;
 window.getCurrentUser = getCurrentUser;
 window.setCurrentUser = setCurrentUser;
 window.handleDownload = handleDownload;

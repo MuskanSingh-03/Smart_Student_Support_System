@@ -11,7 +11,7 @@
 <body>
   <nav class="navbar scrolled" id="navbar">
     <div class="nav-container">
-      <a class="nav-brand" href="index.html"><div class="brand-icon"><i class="fas fa-graduation-cap"></i></div><span class="brand-name">SmartEdu</span></a>
+      <a class="nav-brand" href="index.html"><div class="brand-icon"><i class="fas fa-book-open"></i></div><span class="brand-name">SmartEdu</span></a>
       <ul class="nav-links" id="navLinks">
         <li><a href="index.html" class="nav-link">Home</a></li>
         <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
@@ -203,8 +203,16 @@
     </main>
   </div>
 
+  <script src="js/api.js"></script>
   <script src="js/main.js"></script>
   <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const list = document.getElementById('noticeList');
+      if (list) list.innerHTML = '<p style="color:var(--text-muted);">Loading notices...</p>';
+      const result = await Notices.getAll();
+      if (result.ok) renderNotices(result.data, 'noticeList');
+      else if (list) list.innerHTML = '<p style="color:var(--danger);">Could not load notices. Please refresh and try again.</p>';
+    });
     function filterNotices(type, el) {
       document.querySelectorAll('.notice-card').forEach(c => {
         c.style.display = (type === 'all' || c.dataset.type === type) ? '' : 'none';
