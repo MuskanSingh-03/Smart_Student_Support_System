@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: smart-student-support-system
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 1
+    healthCheckPath: /api/health
+    envVars:
+      - key: SMARTEDU_SECRET_KEY
+        generateValue: true
+      - key: SMARTEDU_HTTPS
+        value: "true"
+      - key: SMARTEDU_ADMIN_PASSWORD
+        sync: false

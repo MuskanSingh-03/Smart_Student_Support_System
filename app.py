@@ -95,7 +95,8 @@ def require_api_session():
                 if not assigned or not target.isdigit():
                     return jsonify({'error': 'Forbidden'}), 403
 
-DB_PATH = os.path.join(ROOT, 'smartedu.db')
+DB_PATH = os.environ.get('SMARTEDU_DB_PATH', os.path.join(ROOT, 'smartedu.db'))
+os.makedirs(os.path.dirname(os.path.abspath(DB_PATH)), exist_ok=True)
 
 # ── Serve HTML pages ──────────────────────────────────────
 @app.route('/')
@@ -465,10 +466,14 @@ def init_db():
     if count == 0:
         conn.executescript(SEED_DATA)
         print("[OK] Database seeded with sample data!")
+    admin_password = os.environ.get('SMARTEDU_ADMIN_PASSWORD') or 'password123'
     conn.execute(
         "INSERT OR IGNORE INTO users (name,email,password,role,department) VALUES (?,?,?,?,?)",
-        ('SmartEdu Administrator', 'admin@college.edu', hash_pw('password123'), 'admin', 'Administration')
+        ('SmartEdu Administrator', 'admin@college.edu', hash_pw(admin_password), 'admin', 'Administration')
     )
+    if os.environ.get('SMARTEDU_ADMIN_PASSWORD'):
+        conn.execute("UPDATE users SET password=? WHERE email='admin@college.edu' AND role='admin'",
+                     (hash_pw(admin_password),))
     conn.commit()
     conn.close()
 
@@ -1181,11 +1186,12 @@ def leaderboard():
 # ─────────────────────────────────────────
 #  MAIN
 # ─────────────────────────────────────────
+init_db()
+
 if __name__ == '__main__':
     print("=" * 50)
     print("  SmartEdu Backend - Flask + SQLite")
     print("=" * 50)
-    init_db()
     print("[INFO] API running at: http://localhost:5000")
     print("[INFO] Open frontend: http://localhost:8080")
     print("[INFO] Database file: smartedu.db")
@@ -1202,4 +1208,5 @@ if __name__ == '__main__':
     print("  GET  /api/attendance/at-risk")
     print("  GET  /api/stats")
     print("=" * 50)
-    app.run(debug=os.environ.get('SMARTEDU_DEBUG', '').lower() == 'true', port=5000, host='127.0.0.1')
+    app.run(debug=os.environ.get('SMARTEDU_DEBUG', '').lower() == 'true',
+            port=int(os.environ.get('PORT', 5000)), host='0.0.0.0')
